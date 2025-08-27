@@ -8,7 +8,7 @@ MIR_make_size_bins <- function(years, analyzed_species, size_bin_count = 10, len
   p = 1.6
 
 
-  ntot <- read_csv("../data/ncrmp_mir_2022_coral_ntot.csv") %>%
+  ntot <- read_csv("../Project/data/ncrmp_mir_2022_coral_ntot.csv") %>%
     dplyr::mutate(mtot = 250) %>%
     dplyr::rename(ntot = nht) %>%
     dplyr::filter(strat_cora != "CFK04") #%>%
@@ -22,7 +22,7 @@ MIR_make_size_bins <- function(years, analyzed_species, size_bin_count = 10, len
     left_join(ntot) %>%
     mutate(wh = ntot/ngrtot)
 
-  demos<- read_csv("../data/FK2024_NCRMP_DRM_MIR_corsz_AR_NK.csv") %>%
+  demos<- read_csv("../Project/data/FK2024_NCRMP_DRM_MIR_corsz_AR_NK.csv") %>%
     dplyr::filter(YEAR %in% years) %>%
     dplyr::filter(SPECIES_CD %in% analyzed_species) %>%
     dplyr::rename(

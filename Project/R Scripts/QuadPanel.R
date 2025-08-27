@@ -5,12 +5,12 @@ quad_panel_MIR <- function (target_species) {
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #The following dataset was created using the "Translating_Demo_Data.R"
 
-  df <- read_csv("../data/FK2024_NCRMP_DRM_MIR_corsz_AR_NK.csv") %>%
+  df <- read_csv("../Project/data/FK2024_NCRMP_DRM_MIR_corsz_AR_NK.csv") %>%
   filter(!(analysis_group == "NCRMP_NA" )) %>%
   filter(!(strat_cora == "CFK04" & YEAR == 2022)) ##FLAG. Don't quite understand why we're doing this but we did it in LPI data and Dione has it in her script. Will follow up
 
 ## ntot given by Dione, not sure why mtot = 250
-ntot <- read_csv("../data/ncrmp_mir_2022_coral_ntot.csv") %>%
+ntot <- read_csv("../Project/data/ncrmp_mir_2022_coral_ntot.csv") %>%
   dplyr::mutate(mtot = 250) %>%
   dplyr::rename(ntot = nht)
 
