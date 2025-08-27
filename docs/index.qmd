@@ -1,7 +1,7 @@
 ---
 title: "Mission: Iconic Reefs and National Coral Reef Monitoring Program Benthic Analysis"
-author:
-  - Nicole Krampitz, Julia Mateski, and Dione Swanson
+subtitle: "Summary Report for 2022 and 2024"
+
 format:
   html:
     theme: cosmo
@@ -28,6 +28,8 @@ execute:
   warning: false
   message: false
 ---
+
+## Introduction
 
 The [Mission: Iconic Reefs](https://www.fisheries.noaa.gov/southeast/habitat-conservation/restoring-seven-iconic-reefs-mission-recover-coral-reefs-florida-keys) (M:IR) project is a decades-long ambitious effort to restore seven key coral reef areas in the Florida Keys National Marine Sanctuary (FKNMS) via coral propagation and transplantation. Restoration is being carried out in planned phases along with biennial monitoring to provide a quantitative measure of restoration effects over time. The primary goal of this monitoring is to compare fish populations, coral populations, and benthic community metrics within M:IR restoration areas to those reefs in the broader Florida Keys in partnership with the National Coral Reef Monitoring Program (NCRMP). Currently, two rounds of surveying have been completed (in 2022 and 2024) to establish baseline conditions. This report focuses on coral populations and benthic community metrics; a separate report can be found for fish population assessments.
 
@@ -191,7 +193,7 @@ invisible(table2)
 ```{r print coral demo table, echo = FALSE}
 sjPlot::tab_df(
   table_2,
-  title = "<div style='text-align:center'>The number of coral demographic sites sampled inside and outside M:IR areas in each stratum (includes DRM data).</div>",
+  title = "<div style='text-align:center'> Table 2. The number of coral demographic sites sampled inside and outside M:IR areas in each stratum (includes DRM data).</div>",
   escape = FALSE,
   show.footnote = TRUE,
   alternate.rows = TRUE,
@@ -1085,201 +1087,6 @@ c <- c %>% filter(SPECIES_CD %in% spec_unq)
   
   print(plt1)
 
-```
-
-## **Supplemental Information**
-
-### M:IR Restoration Sites Benthic Cover Composition
-
-```{r zone_fig, fig.cap = "Figure 11. Mean scleractinan and macroalgal cover at each of the eight M:IR restoration sites in 2022 and 2024.", fig.width=12, fig.asp=0.9, echo = FALSE}
-###Start from the end of Translating_LPI_data
-
-##Have this dataset, has the MIR sites and analysis grounds
-tmp <- read_csv("../Project/data/FK2022_24_MIR_NCRMP_bcov_dat1_NK.csv") %>%
-  filter(survey_type == "MIR")
-
-##But in order to add the MIR groups, I need to add the MAPGRID NRs
-###Pull out the MIR_zones from the data grid
-MIR_zones <- read.csv("../Project/data/MIR_zones.csv") %>% select(MAPGRID_NR, MIR_zone)
-
-##Bring in the PSU/Mapgrid Link, copied from earlier part of Translating_LPI_data
-df_22 <-  read_csv("../Project/data/NCRMP_FKEYS2022_Benthic_Data01_BenthicCover_points.csv")
-df_24 <- read_csv("../Project/data/FLK_MIR_2024_benthic_cover.csv")
-
-tmp2 <- full_join(df_22, df_24) %>%
-  select(REGION, YEAR, PRIMARY_SAMPLE_UNIT, MAPGRID_NR) %>% left_join(., MIR_zones) %>% unique()
-
-
-###Bring it back to the original data and join it all
-zones <- tmp %>%
-  left_join(., tmp2 %>% select(PRIMARY_SAMPLE_UNIT, YEAR, MIR_zone)) %>%
-  ##Manuall rewriting those in 2022 that fell outside the exact boundaries but were still considered MIR
-  dplyr::mutate(MIR_zone = case_when(PRIMARY_SAMPLE_UNIT == 9080 ~ "Carysfort North",
-                                     PRIMARY_SAMPLE_UNIT == 9079 ~ "Carysfort North",
-                                     PRIMARY_SAMPLE_UNIT == 9054 ~ "Eastern Dry Rocks",
-                                     TRUE ~ MIR_zone))  %>%
-  filter(PRIMARY_SAMPLE_UNIT != 9151) #blank LPI, survey was pulled
-
-##Now copying from Translating_LPI_StRS forward. This was slightly editied to be just for MIR data (no other analysis_group, and with MIR_zone)
-#Step 1: Import the data, calculate proportional cover
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~
-df <- zones %>%
-  mutate(prp_cov = cat_p / LPI_total) %>%
-   filter(analysis_group == "MIR_GRP") #Filtered again because those sites that we rewrote earlier aren't used in this analysis
-
-## Ntot given by Dione. Need to take out CFK04 (only for 2022) because no inside outside
-ntot <- read_csv("../Project/data/ncrmp_mir_2022_coral_ntot.csv") %>%
-  dplyr::mutate(mtot = 250) %>%
-  dplyr::rename(ntot = nht)
-
-ntot <- full_join(
-  ntot %>%
-    dplyr::mutate(YEAR = 2022) %>%
-    dplyr::filter(strat_cora != "CFK04"),
-  ntot %>%
-    dplyr::mutate(YEAR = 2024)) %>%
-    filter(analysis_group == "MIR_GRP")
-
-##MIR Zones each year that have NTOTs
-##This dataset was written manually and included writing out for each zone which strats were sampled in that year.
-##This step is necessary so that it is only averaging across strats that existed in that zone
-zones_ntot <- read_csv("../Project/data/NTOT_Mir_Zones.csv")
-ntot_filtered <- full_join(zones_ntot, ntot)
-
-####Step 2: Stratum-Level Density Estimates
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#straight transcription of math from DS
-#weighting
-dens_estimates <-  df %>%
-  group_by(analysis_group, strat_cora, YEAR, COVER_CAT_CD, MIR_zone) %>%
-  summarise(
-    n = n(),
-    smprp = sum(prp_cov, na.rm = TRUE)
-  ) %>%
-  mutate(
-    avp = smprp / n,
-    var_avp = ifelse(n > 1, (n / (n - 1)) * avp * (1 - avp), 0), ##updated from Dione's math to set variance as 0 when n=1 instead of dividing by 0
-    s1 = var_avp
-  ) %>%
-  ##add ntot for each strat
-  left_join(., ntot_filtered) %>%
-  ## summarise ngrtot avaliable ntot on each strat/analysis group
-  left_join(., ntot_filtered %>% group_by(MIR_zone, YEAR) %>%
-              summarise(ngrtot = sum(ntot))) %>%
-  ## weighted
-  mutate(wh = ntot/ngrtot)
-
-dens_estimates <- dens_estimates %>%
-  mutate(
-    wh = ntot / ngrtot,
-    fn = n / ntot,
-    vbar_p = (1 - fn) * s1 / n,
-    se_p = sqrt(vbar_p),
-    wavp_tmp = wh * avp,
-    wvbar_p = wh^2 * vbar_p
-  )
-
-####Step 3: Domain-Level Density Estimates
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#math transcribed directly from DS
-domain_estimates <- dens_estimates %>%
-  group_by(analysis_group, YEAR, COVER_CAT_CD, MIR_zone) %>%
-  summarise(
-    wavp = sum(wavp_tmp),
-    wvbar_p = sum(wvbar_p),
-    sem = sd(wavp_tmp)/sqrt(length(wavp_tmp)),
-    n = sum(n),
-    nstrat = n()
-  ) %>%
-  mutate(
-    se_wp = sqrt(wvbar_p)
-  ) %>%
-  mutate(across(c(wavp, se_wp), round, 5))
-
-
-### Cover
-cat_codes <- read_csv("../Project/data/bcov_cat_codes.csv") %>%
-  dplyr::rename(cover_group = CODE)
-cvr <- domain_estimates %>%
-  dplyr::rename(
-    cover_group = COVER_CAT_CD,
-    REGION = analysis_group,
-    avCvr = wavp,
-    var = wvbar_p,
-    n_sites = n
-  ) %>%
-  # dplyr::mutate(YEAR = 2022) %>%
-  left_join(cat_codes %>% select (cover_group:COV_CAT_B))
-
-
-###Formatting Data for Combined Macroalgal/Hard Coral plot
-cvr_analysis <- cvr %>% group_by(REGION, COV_CAT_B, YEAR, MIR_zone) %>%
-  #  filter(COV_CAT_A ==  "HCORA" | COV_CAT_A == "MACAL") %>%
-  summarise(
-    avCvr = sum(avCvr),
-    vars = sum(var),     # Sum of variances across strata (assuming independence)
-    SEM = sqrt(vars)      # domain level standard error
-  )
-
-
-
-pos_dodge <- position_dodge(width =  0.06)
-
-
-cover_colors <- c("HCORS" = "deeppink3", "MACAL" = "#26BA41")
-cover_labels <- c("HCORS" = "Coral", "MACAL" = "Macroalgae")
-
-
-facet_labels <- c(
-  "Carysfort North" = "Carysfort\nNorth",
-  "Carysfort South" = "Carysfort\nSouth",
-  "Cheeca Rocks" = "Cheeca\nRocks",
-  "Eastern Dry Rocks" = "Eastern\nDry Rocks",
-  "Horseshoe" = "Horseshoe",   
-  "Looe" = "Looe\nKey",
-  "Sombrero" = "Sombrero",
-  "Newfound Harbor" = "Newfound\nHarbor"
-)
-
-
-plt <- cvr_analysis %>%
-  filter(COV_CAT_B %in% names(cover_colors)) %>%
-  ggplot(aes(x = as.integer(YEAR), y = avCvr, color = COV_CAT_B)) +
-  geom_point(size = 2, position = pos_dodge) +
-  geom_line(size = 1, position = pos_dodge) +
-  geom_errorbar(
-    aes(
-      ymin = pmax(avCvr - SEM, 0),
-      ymax = pmin(avCvr + SEM, 0.5)
-    ), width = 0.1,
-    position = pos_dodge  ) +
-  scale_color_manual(values = cover_colors, labels = cover_labels, name = "") +
-  labs(x = "Year", y = "Benthic Cover (%)") +
-  scale_x_continuous(breaks = c(2022, 2024)) +
-  scale_y_continuous(
-    limits = c(0, 0.51),
-    expand = c(0, 0),
-    labels = scales::label_percent(accuracy = 1)
-  ) +
-  facet_wrap(  ~MIR_zone, nrow = 2,
-    labeller = labeller(MIR_zone = facet_labels)
-  ) +
-  theme_Publication(base_size = 15) +
-  theme(
-    strip.text = element_text(face = "bold.italic", size = 18),
-    axis.text.x = element_text(size = 12),
-    axis.title = element_text(size = 18),
-    legend.position = "bottom",
-    legend.direction = "horizontal",
-    legend.key.size = unit(1.2, "cm"),
-    legend.margin = margin(0, 0, 0, 0, "cm"),
-    legend.text = element_text(size = 18),
-    legend.background = element_blank(),
-    legend.title = element_blank()
-  ) +
-  guides(color = guide_legend(override.aes = list(size = 4)))
-
-print(plt)
 ```
 
 ## **References**
