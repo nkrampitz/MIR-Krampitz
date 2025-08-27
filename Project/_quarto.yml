@@ -1,0 +1,5 @@
+project:
+  type: default
+
+resources:
+  - MIR_quarto.pdf
