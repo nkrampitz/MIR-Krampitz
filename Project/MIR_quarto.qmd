@@ -69,7 +69,7 @@ source("R Scripts/QuadPanel.R")
 source("R Scripts/dis_ble_prev_ratio_est.R")
 
 
-setwd("~/Downloads/MIR-main/Project")
+setwd("~/Downloads/MIR-Krampitz/Project")
 ```
 
 ```{r MIR species, echo = FALSE}

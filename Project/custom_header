@@ -1,9 +1,0 @@
-\usepackage{graphicx}
-\usepackage{titling}
-
-\pretitle{%
-  \begin{center}
-  \includegraphics[width=4cm]{project/coral_image_files/mir_logo.jpg}\hspace{1em}%
-  \includegraphics[width=4cm]{coral_image_files/noaa_crcp.jpg}\\[1em]
-  \LARGE
-}
