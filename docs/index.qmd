@@ -31,9 +31,11 @@ execute:
 
 ## Introduction
 
-The [Mission: Iconic Reefs](https://www.fisheries.noaa.gov/southeast/habitat-conservation/restoring-seven-iconic-reefs-mission-recover-coral-reefs-florida-keys) (M:IR) project is a decades-long ambitious effort to restore seven key coral reef areas in the Florida Keys National Marine Sanctuary (FKNMS) via coral propagation and transplantation. Restoration is being carried out in planned phases along with biennial monitoring to provide a quantitative measure of restoration effects over time. The primary goal of this monitoring is to compare fish populations, coral populations, and benthic community metrics within M:IR restoration areas to those reefs in the broader Florida Keys in partnership with the National Coral Reef Monitoring Program (NCRMP). Currently, two rounds of surveying have been completed (in 2022 and 2024) to establish baseline conditions. This report focuses on coral populations and benthic community metrics; a separate report can be found for fish population assessments.
+[Mission: Iconic Reefs](https://www.fisheries.noaa.gov/southeast/habitat-conservation/restoring-seven-iconic-reefs-mission-recover-coral-reefs-florida-keys) (M:IR) is a multi-institutional initiative designed to restore ecological function and biodiversity across key reef sites in the Florida Keys. Led by NOAA in collaboration with federal, state, institutional, and non-profit partners, M:IR targets nearly three million square feet of reef at seven key coral reefs in the Florida Keys National Marine Sanctuary (FKNMS). The overarching M:IR goal is to restore coral cover and reef function to a self-sustaining state.  
 
-![Figure 1: Map of the Florida Reef Tract with Specified M:IR Restoration Sites](../Project/images/MIR Map.png){fig-align="center"}
+Monitoring the response of coral reef benthic communities and coral populations to reef restoration is essential to quantify changes over time from restoration (Goergen et al. 2022). For this comparison of the status of Iconic Reefs in comparison to Florida Keys reefs, National Coral Reef Monitoring Program (NCRMP) surveys were conducted in 2022 and 2024 by the FKNMS M:IR field team. NCRMP surveys are conducted on shallow (\<30 m), hard-bottom reef habitats and employ a stratified-random, one-stage design within 50 m × 50 m grid cells to ensure representative sampling across depth and rugosity strata (Ault et al. 2021). The NCRMP survey design ensures that survey sites are allocated by cross-shelf zone, rugosity type, and depth strata with sites distributed around the Florida Keys from nearshore to offshore to a maximum depth of 30 m.  The NCRMP sample grid was spatially joined with the seven distinct MIR zones (Figure 1):  Carysfort (North and South), Cheeca Rocks, Eastern Dry Rocks, Horseshoe Reef, Looe Key, Newfound Harbor, and Sombrero Reef. Survey sites were proportionally allocated within NCRMP strata to maintain consistent representation across habitats. 
+
+![Figure 1: Map of the Florida Keys showing the location of Mission:Iconic Reef's restoration sites](../Project/images/MIR%20Map.png){fig-align="center"}
 
 ```{r libraries, include = FALSE}
 
@@ -76,9 +78,9 @@ MIR_species <- c( "ACR CERV", "ACR PALM", "COL NATA", "DEN CYLI",
 
 ```
 
-Corals and benthic communities were monitored using two different surveys: a Benthic Community Assessment survey and a Coral Demographics survey (NOAA CRCP, 2022b, 2022c). The Benthic Community Assessment survey includes: 1) benthic cover (%) estimates along a 15-m transect with a line point intercept method, 2) presence/absence of Endangered Species Act (ESA)-listed coral species (NOAA National Marine Fisheries Service, 2014), 3) abundance of key macroinvertebrates, and 4) reef rugosity measurements within a 15 m x 2 m belt-transect area (NOAA CRCP, 2022b). At the same site, coral demographics were surveyed within a 10 m x 1 m belt-transect area (NOAA CRCP, 2022c). NCRMP coral demographic survey data was combined with complementarily allocated survey data from Florida Reef Resiliency Program's Disturbance Response Monitoring (DRM). In all Coral Demographics surveys, all live coral colonies ≧ 4 cm were counted, identified to species, measured to the nearest centimeter (length, width, height), and estimates were made of the proportion per colony of any present mortality (recent or old), disease (present, slow, fast), and/or bleaching (total, partial, paling). Only live coral colonies were included in the survey; dead colonies with 100% mortality were not surveyed (e.g., colonies killed by coral disease). Juvenile corals (\< 4 cm) were reported for species richness only and were not included in counts, size measurements, or estimates of condition.
+Corals and benthic communities were monitored using two different NCRMP surveys: the Benthic Community Assessment survey and the Coral Demographics survey (NOAA CRCP 2022a, 2022b, 2024a, 2024b). The Benthic Community Assessment survey includes: 1) benthic cover (%) estimates along a 15-m transect with a line point intercept method, 2) presence/absence of Endangered Species Act (ESA)-listed coral species (NOAA National Marine Fisheries Service, 2014), 3) abundance of key macroinvertebrates, and 4) reef rugosity measurements within a 15 m x 2 m belt-transect area (NOAA CRCP 2022a, 2024b). At the same site, coral demographics were surveyed within a 10 m x 1 m belt-transect area (NOAA CRCP 2022b, 2024b). NCRMP coral demographic survey data were combined with complementarily allocated survey data from Florida Fish and Wildlife Conservation Commission\'s Disturbance Response Monitoring (DRM; coraldrm.org). In all coral demographics surveys, all live coral colonies ≧ 4 cm were counted, identified to species, measured to the nearest centimeter, and estimates were made of the proportion per colony of any present mortality (recent or old), disease (absent, present: slow, fast), and/or bleaching (none, total, partial, paling). Only live coral colonies were included in the survey; dead colonies with 100% mortality were not surveyed (e.g., colonies killed by coral disease). Juvenile corals (\< 4 cm) were reported for species richness only and were not included in counts, size measurements, or estimates of condition (NOAA CRCP 2022b); in 2024, juveniles of select coral species were counted (NOAA CRCP 2024b). In 2024, NCRMP benthic surveys also included large area imaging (LAI) collected at most survey sites: analyses of these LAI data are in progress and not presented here.
 
-A majority of the reef habitats within the seven M:IR areas ranged from 0-12 meters depth. For comparison, survey data from the NCRMP were restricted to the same depth range. The tables and figures below include: Sampling effort by strata and survey year and species-specific estimates of colony density, mean size, partial mortality, size frequency, and prevalence of bleaching and disease. Statistical comparisons were conducted between M:IR and NCRMP estimates for each survey year and between years for M:IR and NCRMP.
+To allow direct comparisons of benthic communities inside the restoration areas with the Florida Keys reefs, the NCRMP dataset was restricted to strata types overlapping M:IR sites and depths less than 12 meters. A majority of the reef habitats within the seven M:IR areas ranged from 0-12 meters depth. Statistical comparisons were conducted between M:IR and NCRMP estimates for each survey year and between years for M:IR and NCRMP. This report focuses on coral populations and benthic community metrics; a separate report can be found for fish population assessments.
 
 ## Benthic Cover Sites
 
@@ -286,13 +288,13 @@ cvr <- read_csv("../Project/data/fk2022_24_NCRMP_MIR_bcov_catcd_dom_NK.csv")%>%
 
 ```
 
-```{r fig_benthic_cover_data (OG), fig.cap="Figure 2.  Hard coral and macroalgae cover estimates inside and outside M:IR areas for 2022 and 2024.  Significant difference in cover estimates in each of these areas was indicated by (*).", fig.width=12, fig.asp=0.9, echo=FALSE}
-wanted_cover_cats <- c("HCORA" , "MACAL")
+```{r fig_benthic_cover_data (OG), echo = FALSE}
+#wanted_cover_cats <- c("HCORA" , "MACAL")
 
 #Formatting Data for Combined Macroalgal/Hard Coral plot
 cvr_analysis <- cvr %>% 
   group_by(REGION, COV_CAT_A, YEAR) %>%
-  filter(COV_CAT_A %in% wanted_cover_cats) %>%
+ # filter(COV_CAT_A %in% wanted_cover_cats) %>%
   summarise(
     avCvr = sum(avCvr),
     SE = sqrt(sum(SE^2)) 
@@ -304,13 +306,25 @@ new_dat <- cvr_analysis %>%
                             "HCORA" = "Hard Coral", 
                             "MACAL" = "Macroalgae",
                             "RAMIC" = "Ramicrusta",
-                            "TURFA" = "Turf Algae"))
+                            "TURFA" = "Turf Algae",
+                            "SPONG" = "Sponge",
+                            "SCORA" = "Octocorals",
+                            "CCALG" = "Crustose Coralline Algae (CCA)",
+                            "OTHER" = "Other"
+                            ))
 
+##Other includes Cyanobacteria, Bare, Palythoa, Other organisms, Millepora, Seagrass
 
 dodge_width <- 0.06
 
+# Get unique categories
+categories <- unique(new_dat$COV_CAT_A)
 
-cover_plot <- new_dat %>%
+# Define the plot for multi-function use in tabset
+make_plot <- function(df, category) {
+  df_filtered <- df %>% filter(COV_CAT_A == category)
+
+df_filtered %>%
   ggplot(aes(x = as.integer(YEAR), y = avCvr *100, group = interaction(COV_CAT_A, REGION), color = REGION)) +
   geom_point(size = 2, position = position_dodge(width =  0.06)) +
   geom_line(size = 1, position = position_dodge(width =  0.06)) +
@@ -320,9 +334,10 @@ cover_plot <- new_dat %>%
   scale_color_manual(
     values = c("MIR_GRP" = "#0072B2", "NCRMP_GRP" = "#D55E00"),
     labels = c("MIR", "NCRMP"),
-    name = "") +
-  labs(x = "Year", y = "Cover (%)", title = "" ) +
-  facet_wrap(~ COV_CAT_A) +
+    name = ""
+    ) +
+  labs(x = "Year", y = "Cover (%)", title = category ) +
+ # facet_wrap(~ COV_CAT_A) + ##This was when we filtered for just hard corals/macroalgae. If we output as a pdf, might be necessary to bring back
   scale_x_continuous(breaks = c(2022, 2024)) +
   #scale_y_continuous(, labels = scales::percent_format(accuracy = 2) ) +
   theme_Publication(base_size = 20) +
@@ -337,7 +352,26 @@ cover_plot <- new_dat %>%
     legend.title = element_blank()
   ) + guides(color = guide_legend(override.aes = list(size = 4)))
 
-cover_plot
+}
+```
+
+```{r loop through cover plots and tab results, fig.cap="Figure 2a-e.  Hard coral and macroalgae cover estimates inside and outside M:IR areas for 2022 and 2024.  Significant difference in cover estimates in each of these areas was indicated by (*).", fig.width=12, results='asis', fig.asp=0.9, echo=FALSE}
+# Loop through categories and print plots
+cat("::: {.panel-tabset}\n\n")  # open tabset container
+
+# Define manual tab order
+ordered_categories <- c("Hard Coral", "Macroalgae", "Octocorals", "Sponge", "Turf Algae", "Crustose Coralline Algae (CCA)", "Ramicrusta", "Other")
+
+walk(ordered_categories, function(cat) {
+  cat("### ", cat, " {.tab-pane}\n\n", sep = "")
+  
+  cat_plot <- make_plot(new_dat, cat)
+  print(cat_plot)
+  cat("\n\n")
+})
+
+cat(":::\n")  # close tabset container
+
 
 ```
 
@@ -659,8 +693,6 @@ cat("\n:::\n")  # close tabset container
 
 ## Bleaching Estimates
 
-### 2022
-
 ```{r  bleach 2022, fig.cap = "Figure 4. Estimated Observed Bleaching Frequency in 2022 using Ratio Estimaters.", fig.width=9, fig.asp=1.2}
 
 # Set path to data files
@@ -728,15 +760,13 @@ plt_bleach <- tmp_filtered %>%
           legend.position = "bottom",
           legend.text = element_text(size = 10),
           panel.spacing = unit(1, "lines")
-        ) #+
- # ggtitle("2022 Estimates")
+        ) +
+  ggtitle("2022 Estimates")
 
 
 print(plt_bleach)
 
 ```
-
-### 2024
 
 ```{r bleach 2024, fig.cap = "Figure 5. Estimated Observed Bleaching Frequency in 2024 using Ratio Estimaters", fig.width=9, fig.asp=1.2}
 
@@ -802,8 +832,8 @@ plt_bleach <- tmp_filtered %>%
           legend.position = "bottom",
           legend.text = element_text(size = 10),
           panel.spacing = unit(1, "lines")
-        ) #+
-  #ggtitle("2024 Estimates")
+        ) +
+  ggtitle("2024")
 
 
 print(plt_bleach)
@@ -811,8 +841,6 @@ print(plt_bleach)
 ```
 
 ## Disease Estimates
-
-### 2022
 
 ```{r disease 2024, fig.cap = "Figure 6 . Estimated Observed Disease Frequency in 2022 using Ratio Estimaters.", fig.width=9, fig.asp=1.2}
 
@@ -879,15 +907,13 @@ plt_disease <- tmp_filtered %>%
           legend.position = "bottom",
           legend.text = element_text(size = 10),
           panel.spacing = unit(1, "lines")
-        ) #+
-  #ggtitle("2022 Estimates")
+        ) +
+  ggtitle("2022")
 
 
 print(plt_disease)
 
 ```
-
-### 2024
 
 ```{r,  fig.cap = "Figure 7 . Estimated Observed Disease Frequency in 2024 using Ratio Estimaters.", fig.width=9, fig.asp=1.2}
 # Set path to data files
@@ -953,8 +979,8 @@ plt_dis <- tmp_filtered %>%
           legend.position = "bottom",
           legend.text = element_text(size = 10),
           panel.spacing = unit(1, "lines")
-        ) #+
- # ggtitle("2024 Disease Estimates")
+        ) +
+  ggtitle("2024")
 
 
 print(plt_dis)
@@ -1088,6 +1114,11 @@ c <- c %>% filter(SPECIES_CD %in% spec_unq)
   print(plt1)
 
 ```
+
+## Point of Contact
+
+**Shay Viehman** : *NCRMP Atlantic Benthic Team Lead*\
+[shay.viehman\@noaa.gov](mailto:shay.viehman@noaa.gov)
 
 ## **References**
 
