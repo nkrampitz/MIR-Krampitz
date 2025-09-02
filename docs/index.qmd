@@ -78,7 +78,7 @@ MIR_species <- c( "ACR CERV", "ACR PALM", "COL NATA", "DEN CYLI",
 
 ```
 
-Corals and benthic communities were monitored using two different NCRMP surveys: the Benthic Community Assessment survey and the Coral Demographics survey (NOAA CRCP 2022a, 2022b, 2024a, 2024b). The Benthic Community Assessment survey includes: 1) benthic cover (%) estimates along a 15-m transect with a line point intercept method, 2) presence/absence of Endangered Species Act (ESA)-listed coral species (NOAA National Marine Fisheries Service, 2014), 3) abundance of key macroinvertebrates, and 4) reef rugosity measurements within a 15 m x 2 m belt-transect area (NOAA CRCP 2022a, 2024b). At the same site, coral demographics were surveyed within a 10 m x 1 m belt-transect area (NOAA CRCP 2022b, 2024b). NCRMP coral demographic survey data were combined with complementarily allocated survey data from Florida Fish and Wildlife Conservation Commission\'s Disturbance Response Monitoring (DRM; coraldrm.org). In all coral demographics surveys, all live coral colonies ≧ 4 cm were counted, identified to species, measured to the nearest centimeter, and estimates were made of the proportion per colony of any present mortality (recent or old), disease (absent, present: slow, fast), and/or bleaching (none, total, partial, paling). Only live coral colonies were included in the survey; dead colonies with 100% mortality were not surveyed (e.g., colonies killed by coral disease). Juvenile corals (\< 4 cm) were reported for species richness only and were not included in counts, size measurements, or estimates of condition (NOAA CRCP 2022b); in 2024, juveniles of select coral species were counted (NOAA CRCP 2024b). In 2024, NCRMP benthic surveys also included large area imaging (LAI) collected at most survey sites: analyses of these LAI data are in progress and not presented here.
+Corals and benthic communities were monitored using two different NCRMP surveys: the Benthic Community Assessment survey and the Coral Demographics survey (NOAA CRCP 2022a, 2022b, 2024a, 2024b). The Benthic Community Assessment survey includes: 1) benthic cover (%) estimates along a 15-m transect with a line point intercept method, 2) presence/absence of Endangered Species Act (ESA)-listed coral species (NOAA National Marine Fisheries Service, 2014), 3) abundance of key macroinvertebrates, and 4) reef rugosity measurements within a 15 m x 2 m belt-transect area (NOAA CRCP 2022a, 2024b). At the same site, coral demographics were surveyed within a 10 m x 1 m belt-transect area (NOAA CRCP 2022b, 2024b). NCRMP coral demographic survey data were combined with complementarily allocated survey data from Florida Fish and Wildlife Conservation Commission's Disturbance Response Monitoring (DRM; coraldrm.org). In all coral demographics surveys, all live coral colonies ≧ 4 cm were counted, identified to species, measured to the nearest centimeter, and estimates were made of the proportion per colony of any present mortality (recent or old), disease (absent, present: slow, fast), and/or bleaching (none, total, partial, paling). Only live coral colonies were included in the survey; dead colonies with 100% mortality were not surveyed (e.g., colonies killed by coral disease). Juvenile corals (\< 4 cm) were reported for species richness only and were not included in counts, size measurements, or estimates of condition (NOAA CRCP 2022b); in 2024, juveniles of select coral species were counted (NOAA CRCP 2024b). In 2024, NCRMP benthic surveys also included large area imaging (LAI) collected at most survey sites: analyses of these LAI data are in progress and not presented here.
 
 To allow direct comparisons of benthic communities inside the restoration areas with the Florida Keys reefs, the NCRMP dataset was restricted to strata types overlapping M:IR sites and depths less than 12 meters. A majority of the reef habitats within the seven M:IR areas ranged from 0-12 meters depth. Statistical comparisons were conducted between M:IR and NCRMP estimates for each survey year and between years for M:IR and NCRMP. This report focuses on coral populations and benthic community metrics; a separate report can be found for fish population assessments.
 
@@ -308,12 +308,15 @@ new_dat <- cvr_analysis %>%
                             "RAMIC" = "Ramicrusta",
                             "TURFA" = "Turf Algae",
                             "SPONG" = "Sponge",
-                            "SCORA" = "Octocorals",
+                            "SCORA" = "Octocoral",
                             "CCALG" = "Crustose Coralline Algae (CCA)",
                             "OTHER" = "Other"
                             ))
 
 ##Other includes Cyanobacteria, Bare, Palythoa, Other organisms, Millepora, Seagrass
+
+## read in significance
+sig <- read_csv("../Project/data/significance.csv")
 
 dodge_width <- 0.06
 
@@ -324,7 +327,7 @@ categories <- unique(new_dat$COV_CAT_A)
 make_plot <- function(df, category) {
   df_filtered <- df %>% filter(COV_CAT_A == category)
 
-df_filtered %>%
+plot <- df_filtered %>%
   ggplot(aes(x = as.integer(YEAR), y = avCvr *100, group = interaction(COV_CAT_A, REGION), color = REGION)) +
   geom_point(size = 2, position = position_dodge(width =  0.06)) +
   geom_line(size = 1, position = position_dodge(width =  0.06)) +
@@ -342,25 +345,59 @@ df_filtered %>%
   #scale_y_continuous(, labels = scales::percent_format(accuracy = 2) ) +
   theme_Publication(base_size = 20) +
   theme(
-    strip.text = element_text(face = "bold", size = 18),
+    strip.text = element_text(face = "bold", size = 16),
     legend.position = "bottom",
     legend.direction = "horizontal",
     legend.key.size = unit(1.2, "cm"),
     legend.margin = margin(0, 0, 0, 0, "cm"),
-    legend.text = element_text(size = 18),
+    legend.text = element_text(size = 16),
     legend.background = element_blank(),
     legend.title = element_blank()
   ) + guides(color = guide_legend(override.aes = list(size = 4)))
 
+##Adding the significance labels
+#This may take a fair amount of tweaking ##
+sig_cover <- sig %>%
+  filter(metric == "cover") %>%
+  filter(variable == category)
+
+# For between years find a midpoint to go on the plot
+midpoints <- df_filtered %>%
+  group_by(REGION) %>%
+  summarise(
+    y_mid = 1.02 * mean(avCvr * 100, na.rm = TRUE))
+
+## For between groups find the y min to go on the plot
+ymin <- df_filtered %>%
+  group_by(COV_CAT_A) %>%
+  summarise(y_min = 85 * (min(avCvr)- max(SE))) %>%#this hopefully gets a nice plot minimum just below wherever it ends
+  dplyr::rename(variable = COV_CAT_A) #for joining purposes
+
+# Add them to the significane table
+sig_cover <- sig_cover %>%
+  left_join(midpoints, by = "REGION") %>%
+  left_join(ymin, by = "variable")
+
+##Plot it with annotations
+(plot + 
+### Significance BETWEEN GROUPS on X axis
+  geom_text(data = sig_cover %>% filter (is.na(REGION)),
+            aes(x = YEAR, y = y_min), label = "*",
+            inherit.aes = FALSE, size = 15, color = "black") +
+### Significance BETWEEN YEARS on graph
+  geom_text(data = sig_cover %>% filter (is.na(YEAR)),
+            aes(x = 2023, y = y_mid, color = REGION), label = "*",
+            inherit.aes = FALSE, size = 15))
 }
+
 ```
 
-```{r loop through cover plots and tab results, fig.cap="Figure 2a-e.  Hard coral and macroalgae cover estimates inside and outside M:IR areas for 2022 and 2024.  Significant difference in cover estimates in each of these areas was indicated by (*).", fig.width=12, results='asis', fig.asp=0.9, echo=FALSE}
+```{r loop through cover plots and tab results, fig.cap="Figure 2a-e.  Hard coral and macroalgae cover estimates inside and outside M:IR areas for 2022 and 2024.  Significant difference in cover estimates in each of these areas was indicated by (*).", fig.width=9, results='asis', fig.asp=0.8, echo=FALSE}
 # Loop through categories and print plots
 cat("::: {.panel-tabset}\n\n")  # open tabset container
 
 # Define manual tab order
-ordered_categories <- c("Hard Coral", "Macroalgae", "Octocorals", "Sponge", "Turf Algae", "Crustose Coralline Algae (CCA)", "Ramicrusta", "Other")
+ordered_categories <- c("Hard Coral", "Macroalgae", "Octocoral", "Sponge", "Turf Algae", "Crustose Coralline Algae (CCA)", "Ramicrusta", "Other")
 
 walk(ordered_categories, function(cat) {
   cat("### ", cat, " {.tab-pane}\n\n", sep = "")
@@ -506,6 +543,8 @@ create_species_plots <- function(species) {
 
 dodge_width <- 0.05
 
+### DENSITY PLOT ##########
+
   plt1 <- den_filtered %>%
     ggplot(aes(x = YEAR, y = avDen, group = analysis_group, color = analysis_group)) +
     geom_point(position = position_dodge(dodge_width)) +
@@ -518,7 +557,44 @@ dodge_width <- 0.05
     scale_x_continuous(breaks = c(2022, 2024)) +
     scale_color_manual(values = c("#0072B2", "#D55E00"), labels = c("MIR", "Outside"), name = "") +
     scale_linetype_manual(values = c("solid", "dashed"), guide = "none")
+  
 
+##Adding the significance labels
+#This may take a fair amount of tweaking ##
+sig_cover <- sig %>%
+  filter(metric == "density") %>%
+  filter(variable == species)
+
+# For between years find a midpoint to go on the plot
+midpoints <- den_filtered %>%
+  group_by(analysis_group) %>%
+  summarise(
+    y_mid = 1.02 * mean(avDen, na.rm = TRUE)) %>%
+    dplyr::rename(REGION = analysis_group) #for joining purposes
+
+## For between groups find the y min to go on the plot
+ymin <- den_filtered %>%
+  group_by(SPECIES_CD) %>%
+  summarise(y_min = .85 * (min(avDen)- max(SE_avDen))) %>%#this hopefully gets a nice plot minimum just below wherever it ends
+  dplyr::rename(variable = SPECIES_CD) #for joining purposes
+
+# Add them to the significance table
+sig_cover <- sig_cover %>%
+  left_join(midpoints, by = "REGION") %>%
+  left_join(ymin, by = "variable")
+
+##Plot it with annotations
+plt1 <- plt1 + 
+### Significance BETWEEN GROUPS on X axis
+  geom_text(data = sig_cover %>% filter (is.na(REGION)),
+            aes(x = YEAR, y = y_min), label = "*",
+            inherit.aes = FALSE, size = 10, color = "black") +
+### Significance BETWEEN YEARS on graph
+  geom_text(data = sig_cover %>% filter (is.na(YEAR)),
+            aes(x = 2023, y = y_mid, color = REGION), label = "*",
+            inherit.aes = FALSE, size = 10)
+  
+### MORTALITY PLOT ##########
   plt2 <- b_filtered %>%
     ggplot(aes(x = YEAR, y = avMortOld, group = analysis_group, color = analysis_group)) +
     geom_point(position = position_dodge(dodge_width)) +
@@ -531,6 +607,44 @@ dodge_width <- 0.05
     scale_x_continuous(breaks = c(2022, 2024)) +
     scale_color_manual(values = c("#0072B2", "#D55E00"), labels = c("MIR", "Outside"), name = "") +
     scale_linetype_manual(values = c("solid", "dashed"), guide = "none")
+
+##Adding the significance labels
+#This may take a fair amount of tweaking ##
+sig_cover <- sig %>%
+  filter(metric == "mortality") %>%
+  filter(variable == species)
+
+# For between years find a midpoint to go on the plot
+midpoints <- b_filtered %>%
+  group_by(analysis_group) %>%
+  summarise(
+    y_mid = 1.02 * mean(avMortOld, na.rm = TRUE)) %>%
+    dplyr::rename(REGION = analysis_group) #for joining purposes
+
+## For between groups find the y min to go on the plot
+ymin <- b_filtered %>%
+  mutate(YEARS = mean(YEAR)) %>%
+  group_by(SPECIES_CD, YEARS) %>%
+  summarise(y_min = .85 * (min(avMortOld)- max(SE_avMortOld))) %>%
+  #changed here because APAL only has 2022
+  dplyr::rename(variable = SPECIES_CD) #for joining purposes
+
+# Add them to the significance table
+sig_cover <- sig_cover %>%
+  left_join(midpoints, by = "REGION") %>%
+  left_join(ymin, by = "variable")
+
+##Plot it with annotations
+plt2 <- plt2 + 
+### Significance BETWEEN GROUPS on X axis
+  geom_text(data = sig_cover %>% filter (is.na(REGION)),
+            aes(x = YEAR, y = y_min), label = "*",
+            inherit.aes = FALSE, size = 10, color = "black") +
+### Significance BETWEEN YEARS on graph
+  geom_text(data = sig_cover %>% filter (is.na(YEAR)),
+            aes(x = YEARS, y = y_mid, color = REGION), label = "*",
+            inherit.aes = FALSE, size = 10)
+  
 
   plt3 <- c_filtered %>%
     ggplot(aes(x = YEAR, y = avMaxdiam, group = analysis_group, color = analysis_group)) +
@@ -545,8 +659,41 @@ dodge_width <- 0.05
     scale_color_manual(values = c("#0072B2", "#D55E00"), labels = c("MIR", "Outside"), name = "") +
     scale_linetype_manual(values = c("solid", "dashed"), guide = "none")
   
+##Adding the significance labels
+#This may take a fair amount of tweaking ##
+sig_cover <- sig %>%
+  filter(metric == "mortality") %>%
+  filter(variable == species)
 
-  #name = "Length (cm)"
+# For between years find a midpoint to go on the plot
+midpoints <- c_filtered %>%
+  group_by(analysis_group) %>%
+  summarise(
+    y_mid = 1.02 * mean(avMaxdiam), na.rm = TRUE) %>%
+    dplyr::rename(REGION = analysis_group) #for joining purposes
+
+## For between groups find the y min to go on the plot
+ymin <- c_filtered %>%
+  group_by(SPECIES_CD) %>%
+  summarise(y_min = .85 * (min(avMaxdiam)- max(SE_maxdiam))) %>%#this hopefully gets a nice plot minimum just below wherever it ends
+  dplyr::rename(variable = SPECIES_CD) #for joining purposes
+
+# Add them to the significance table
+sig_cover <- sig_cover %>%
+  left_join(midpoints, by = "REGION") %>%
+  left_join(ymin, by = "variable")
+
+##Plot it with annotations
+plt3 <- plt3 + 
+### Significance BETWEEN GROUPS on X axis
+  geom_text(data = sig_cover %>% filter (is.na(REGION)),
+            aes(x = YEAR, y = y_min), label = "*",
+            inherit.aes = FALSE, size = 10, color = "black") +
+### Significance BETWEEN YEARS on graph
+  geom_text(data = sig_cover %>% filter (is.na(YEAR)),
+            aes(x = 2023, y = y_mid, color = REGION), label = "*",
+            inherit.aes = FALSE, size = 10)
+
 
   domain_sub = subset(domain_estimates, SPECIES_CD == species)
   demos_sub = subset(demos, SPECIES_CD == species)
@@ -1022,6 +1169,7 @@ a <- a %>%
       legend.text = element_text(size = 10),
       panel.spacing = unit(1, "lines")
     ) 
+  
   
   
   print(plt1)
