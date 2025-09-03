@@ -984,7 +984,7 @@ plt_bleach_NCRMP <- tmp_filtered %>%
 
 ```
 
-```{r bleaching, fig.cap = "Figure 4. Individual Species’ Observed Bleaching Frequency Outside (NCRMP + DRM) and Inside (M:IR) areas.", fig.width=10, fig.asp=1.4}
+```{r bleaching, fig.cap = "Figure 4. Individual Species’ Observed Bleaching Frequency Outside (NCRMP + DRM) and Inside (M:IR) areas.", fig.width=10, fig.asp=1.4, echo = FALSE}
 
 # Combine the two plots side-by-side
 final_plot <- (plt_bleach_MIR + plt_bleach_NCRMP) +
@@ -1110,7 +1110,7 @@ plt_dis_NCRMP <- tmp_filtered %>%
   ggtitle("NCRMP + DRM")
 ```
 
-```{r,  fig.cap = "Figure 6. Individual Species’ Observed Diseased Frequency Outside (NCRMP + DRM) and Inside (M:IR) areas.", fig.width=10, fig.asp=1.4}
+```{r, echo = FALSE, fig.cap = "Figure 6. Individual Species’ Observed Diseased Frequency Outside (NCRMP + DRM) and Inside (M:IR) areas.", fig.width=10, fig.asp=1.4}
 
 # Combine the two plots side-by-side
 (final_plot <- (plt_dis_MIR + plt_dis_NCRMP) +
