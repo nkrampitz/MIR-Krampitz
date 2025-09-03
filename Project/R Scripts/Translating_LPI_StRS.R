@@ -118,8 +118,8 @@ write_csv(domain_estimates %>%
           "data/fk2022_24_NCRMP_MIR_bcov_catcd_dom_NK.csv")
 
 # ###Step 4: Compare to Dione's
-stratum <- read_csv("data/fk2022_NCRMP_MIR_bcov_catcd_strat.csv")
-domain <- read_csv("data/fk2022_NCRMP_MIR_bcov_catcd_dom.csv")
+# stratum <- read_csv("data/fk2022_NCRMP_MIR_bcov_catcd_strat.csv")
+# domain <- read_csv("data/fk2022_NCRMP_MIR_bcov_catcd_dom.csv")
 
 
 

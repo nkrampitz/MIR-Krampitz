@@ -33,9 +33,9 @@ execute:
 
 [Mission: Iconic Reefs](https://www.fisheries.noaa.gov/southeast/habitat-conservation/restoring-seven-iconic-reefs-mission-recover-coral-reefs-florida-keys) (M:IR) is a multi-institutional initiative designed to restore ecological function and biodiversity across key reef sites in the Florida Keys. Led by NOAA in collaboration with federal, state, institutional, and non-profit partners, M:IR targets nearly three million square feet of reef at seven key coral reefs in the Florida Keys National Marine Sanctuary (FKNMS). The overarching M:IR goal is to restore coral cover and reef function to a self-sustaining state.  
 
-Monitoring the response of coral reef benthic communities and coral populations to reef restoration is essential to quantify changes over time from restoration (Goergen et al. 2022). For this comparison of the status of Iconic Reefs in comparison to Florida Keys reefs, National Coral Reef Monitoring Program (NCRMP) surveys were conducted in 2022 and 2024 by the FKNMS M:IR field team. NCRMP surveys are conducted on shallow (\<30 m), hard-bottom reef habitats and employ a stratified-random, one-stage design within 50 m × 50 m grid cells to ensure representative sampling across depth and rugosity strata (Ault et al. 2021). The NCRMP survey design ensures that survey sites are allocated by cross-shelf zone, rugosity type, and depth strata with sites distributed around the Florida Keys from nearshore to offshore to a maximum depth of 30 m.  The NCRMP sample grid was spatially joined with the seven distinct MIR zones (Figure 1):  Carysfort (North and South), Cheeca Rocks, Eastern Dry Rocks, Horseshoe Reef, Looe Key, Newfound Harbor, and Sombrero Reef. Survey sites were proportionally allocated within NCRMP strata to maintain consistent representation across habitats. 
+Monitoring the response of coral reef benthic communities and coral populations to reef restoration is essential to quantify changes over time from restoration (Goergen et al. 2022). For this comparison of the status of Iconic Reefs in comparison to Florida Keys reefs, National Coral Reef Monitoring Program (NCRMP) surveys were conducted in 2022 and 2024 by the FKNMS M:IR field team. NCRMP surveys are conducted on shallow (\<30 m), hard-bottom reef habitats and employ a stratified-random, one-stage design within 50 m × 50 m grid cells to ensure representative sampling across depth and rugosity strata (Ault et al. 2021). The NCRMP survey design ensures that survey sites are allocated by cross-shelf zone, rugosity type, and depth strata with sites distributed around the Florida Keys from nearshore to offshore to a maximum depth of 30 m.  The NCRMP sample grid was spatially joined with the seven distinct MIR zones (Figure 1): Carysfort (North and South), Cheeca Rocks, Eastern Dry Rocks, Horseshoe Reef, Looe Key, Newfound Harbor, and Sombrero Reef. Survey sites were proportionally allocated within NCRMP strata to maintain consistent representation across habitats. 
 
-![Figure 1: Map of the Florida Keys showing the location of Mission:Iconic Reef's restoration sites](../Project/images/MIR%20Map.png){fig-align="center"}
+![Figure 1: Map of the Florida Keys showing the sites of Mission:Iconic Reef](../Project/images/MIR%20Map.png){fig-align="center"}
 
 ```{r libraries, include = FALSE}
 
@@ -50,6 +50,7 @@ library(ggthemes)
 library(extrafont)
 library(grid)
 library(ggthemes)
+library(ggpattern)
 library(extrafont)
 library(plotly)
 library(tidyverse)
@@ -78,7 +79,7 @@ MIR_species <- c( "ACR CERV", "ACR PALM", "COL NATA", "DEN CYLI",
 
 ```
 
-Corals and benthic communities were monitored using two different NCRMP surveys: the Benthic Community Assessment survey and the Coral Demographics survey (NOAA CRCP 2022a, 2022b, 2024a, 2024b). The Benthic Community Assessment survey includes: 1) benthic cover (%) estimates along a 15-m transect with a line point intercept method, 2) presence/absence of Endangered Species Act (ESA)-listed coral species (NOAA National Marine Fisheries Service, 2014), 3) abundance of key macroinvertebrates, and 4) reef rugosity measurements within a 15 m x 2 m belt-transect area (NOAA CRCP 2022a, 2024b). At the same site, coral demographics were surveyed within a 10 m x 1 m belt-transect area (NOAA CRCP 2022b, 2024b). NCRMP coral demographic survey data were combined with complementarily allocated survey data from Florida Fish and Wildlife Conservation Commission's Disturbance Response Monitoring (DRM; coraldrm.org). In all coral demographics surveys, all live coral colonies ≧ 4 cm were counted, identified to species, measured to the nearest centimeter, and estimates were made of the proportion per colony of any present mortality (recent or old), disease (absent, present: slow, fast), and/or bleaching (none, total, partial, paling). Only live coral colonies were included in the survey; dead colonies with 100% mortality were not surveyed (e.g., colonies killed by coral disease). Juvenile corals (\< 4 cm) were reported for species richness only and were not included in counts, size measurements, or estimates of condition (NOAA CRCP 2022b); in 2024, juveniles of select coral species were counted (NOAA CRCP 2024b). In 2024, NCRMP benthic surveys also included large area imaging (LAI) collected at most survey sites: analyses of these LAI data are in progress and not presented here.
+Corals and benthic communities were monitored using two different NCRMP surveys: the Benthic Community Assessment survey and the Coral Demographics survey (NOAA CRCP 2022a, 2022b, 2024a, 2024b). The Benthic Community Assessment survey includes: 1) benthic cover (%) estimates along a 15-m transect with a line point intercept method, 2) presence/absence of Endangered Species Act (ESA)-listed coral species (NOAA National Marine Fisheries Service, 2014), 3) abundance of key macroinvertebrates, and 4) reef rugosity measurements within a 15 m x 2 m belt-transect area (NOAA CRCP 2022a, 2024b). At the same site, coral demographics were surveyed within a 10 m x 1 m belt-transect area (NOAA CRCP 2022b, 2024b). NCRMP coral demographic survey data were combined with complementarily allocated survey data from Florida Fish and Wildlife Conservation Commission's Disturbance Response Monitoring ([DRM](coraldrm.org)). In all coral demographics surveys, all live coral colonies ≧ 4 cm were counted, identified to species, measured to the nearest centimeter, and estimates were made of the proportion per colony of any present mortality (recent or old), disease (absent, present: slow, fast), and/or bleaching (none, total, partial, paling). Only live coral colonies were included in the survey; dead colonies with 100% mortality were not surveyed (e.g., colonies killed by coral disease). Juvenile corals (\< 4 cm) were reported for species richness only and were not included in counts, size measurements, or estimates of condition (NOAA CRCP 2022b); in 2024, juveniles of select coral species were counted (NOAA CRCP 2024b). In 2024, NCRMP benthic surveys also included large area imaging (LAI) collected at most survey sites: analyses of these LAI data are in progress and not presented here.
 
 To allow direct comparisons of benthic communities inside the restoration areas with the Florida Keys reefs, the NCRMP dataset was restricted to strata types overlapping M:IR sites and depths less than 12 meters. A majority of the reef habitats within the seven M:IR areas ranged from 0-12 meters depth. Statistical comparisons were conducted between M:IR and NCRMP estimates for each survey year and between years for M:IR and NCRMP. This report focuses on coral populations and benthic community metrics; a separate report can be found for fish population assessments.
 
@@ -125,19 +126,25 @@ if (knitr::is_html_output()) {
       searching = FALSE
     )
   )}
-name <- c("Study Area", "Strata Name", "Strat Description", "2022 Sample Number", "2024 Sample Number")
+name <- c("<b>Study Area</b>", "<b>Strata Name</b>", "<b>Strat Description</b>", "<b>2022 Sample Number</b>", "<b>2024 Sample Number</b>")
 
 invisible(table)
 ```
 
 ```{r create benthic cover table, echo = FALSE}
+table <- table %>% ungroup() %>%
+  mutate(across(everything(), ~ ifelse(is.na(.), "--", .)))
+
+
 sjPlot::tab_df(
   table,
   title = "<div style='text-align:center'>Table 1. Number of benthic cover sites sampled inside and outside M:IR areas in each stratum.</div>",
   escape = FALSE,
   show.footnote = TRUE,
   alternate.rows = TRUE,
-  col.header = name
+  col.header = name,
+    CSS = list(
+    css.caption = "font-weight: normal;") 
 )
 
 ```
@@ -169,7 +176,7 @@ table_2 <- DRM %>%
   pivot_wider(id_cols = STRAT:description, names_from = YEAR, values_from = count) %>%
   mutate(`Study area` = case_when(
     PROT == "MIR_GRP"~ "Inside (M:IR)",
-    PROT == "NCRMP_GRP" ~ "Outside (NCRMP + DRM)"
+    PROT == "NCRMP_GRP" ~ "Outside <br> (NCRMP + DRM)"
   )) %>%
     select(`Study area`, STRAT, description, `2022`, `2024`) %>%
     arrange(`Study area`, STRAT)
@@ -193,13 +200,20 @@ invisible(table2)
 ```
 
 ```{r print coral demo table, echo = FALSE}
+table_2 <- table_2 %>% ungroup() %>%
+  mutate(across(everything(), ~ ifelse(is.na(.), "--", .)))
+
 sjPlot::tab_df(
   table_2,
   title = "<div style='text-align:center'> Table 2. The number of coral demographic sites sampled inside and outside M:IR areas in each stratum (includes DRM data).</div>",
   escape = FALSE,
   show.footnote = TRUE,
   alternate.rows = TRUE,
-  col.header = name
+  col.header = name,
+  CSS = list(
+    css.firsttablecol = "width: 140px;", # widen first col
+    css.th = "font-style: normal; font-weight: bold;",  # headers bold, not italic
+    css.caption = "font-weight: normal;") # title/description not bold
 )
 ```
 
@@ -213,12 +227,14 @@ M:IR selected 10 focal coral species for comparison to NCRMP: *Acropora palmata*
 df <- read.csv( "../Project/data/FK2024_NCRMP_DRM_MIR_corsz_AR_NK.csv") %>%
   filter(N > 0,
          analysis_group != "NCRMP_NA") %>%
-  group_by(SPECIES_CD) %>%
+  group_by(SPECIES_CD, YEAR) %>%
   summarise(observed = n()) %>%
-  arrange(desc(observed))
+  arrange(desc(observed)) %>%
+  pivot_wider(id_cols = SPECIES_CD, names_from = YEAR, values_from = observed)
+
 
 ##Top 15 species
-top <- df %>% slice(1:15)
+top <- df %>% ungroup() %>% dplyr::slice(1:15)
 
 ##MIR Species
 target_species <- c("ACR PALM", "ACR CERV", "COL NATA", "DEN CYLI",
@@ -237,35 +253,42 @@ names <- read_csv("../Project/data/DRM_FLK_2014_2024_2stage_coral_demographics.c
 
 
 final <- left_join(table, names) %>%
-  select(SPECIES_NAME, SPECIES_CD, observed) %>%
-  arrange(desc(observed)) %>%
+  select(SPECIES_NAME, SPECIES_CD, `2022`, `2024`) %>%
+  arrange(desc(`2022`)) %>%
   mutate(SPECIES_NAME =
            ifelse(
              `SPECIES_CD` %in% target_species,
              paste0("*", "<i>", SPECIES_NAME, "</i>"),
              paste0("<i>", SPECIES_NAME, "</i>")
-           ))
-
-
-
-
+           )) %>%
+  ungroup() %>%
+  select(-SPECIES_CD)
 ```
 
 ```{r create top species table, echo = FALSE}
+final <- final %>% ungroup() %>%
+  mutate(across(everything(), ~ ifelse(is.na(.), "--", .)))
+
 sjPlot::tab_df(
   final,
-  title = "<div style='text-align:center'>Table 3. Most Observed Species and Focal M:IR Species</div>",
+  title = "<div style='text-align:center'>Table 3. Most Observed Species and Focal M:IR Species Each Year</div>",
   alternate.rows = TRUE,
   show.footnote = TRUE,
   footnote = "* indicates M:IR focal species",
-  col.header = c("Species", "Species Code", "Number of Colonies Observed")
+  col.header = c(
+    "<b>Species</b>",
+    "<b>Colonies in 2022</b>",
+    "<b>Colonies in 2024</b>"
+  ),
+    CSS = list(
+    css.caption = "font-weight: normal;") 
 )
 
 ```
 
 ## Benthic Cover Composition
 
-Temporal trends in benthic cover of functional groups such as coral and macroalgae cover provide insight .....
+Temporal trends in benthic cover of functional groups such as coral and macroalgae cover provide information on changes to the benthic community composition over time.
 
 ```{r fig 1: benthic cover data, fig.width=12, fig.asp=0.6, echo = FALSE}
 
@@ -297,7 +320,11 @@ cvr_analysis <- cvr %>%
  # filter(COV_CAT_A %in% wanted_cover_cats) %>%
   summarise(
     avCvr = sum(avCvr),
-    SE = sqrt(sum(SE^2)) 
+    SE = sqrt(sum(SE^2))#,
+    # LCI_1.96 = avCvr - 1.96 * SE,
+    # UCI_1.96 = avCvr + 1.96 * SE,
+    # LCI = avCvr - SE,
+    # UCI = avCvr + SE
   )
 
 #change names --> more readable
@@ -373,7 +400,7 @@ ymin <- df_filtered %>%
   summarise(y_min = 85 * (min(avCvr)- max(SE))) %>%#this hopefully gets a nice plot minimum just below wherever it ends
   dplyr::rename(variable = COV_CAT_A) #for joining purposes
 
-# Add them to the significane table
+# Add them to the significance table
 sig_cover <- sig_cover %>%
   left_join(midpoints, by = "REGION") %>%
   left_join(ymin, by = "variable")
@@ -392,7 +419,7 @@ sig_cover <- sig_cover %>%
 
 ```
 
-```{r loop through cover plots and tab results, fig.cap="Figure 2a-e.  Hard coral and macroalgae cover estimates inside and outside M:IR areas for 2022 and 2024.  Significant difference in cover estimates in each of these areas was indicated by (*).", fig.width=9, results='asis', fig.asp=0.8, echo=FALSE}
+```{r loop through cover plots and tab results, fig.cap="Figure 2.  Cover estimates for main benthic groups inside and outside M:IR areas for 2022 and 2024. A black (*) indicates a significant difference in cover estimates between groups in that survey year. A colored (*) indicates significance across years for the given group. The category ‘Other’ comprises Cyanobacteria, Palythoa, <i>Millepora</i>, Seagrass, Bare Substrate, and other miscellaneous organisms.", fig.width=9, results='asis', fig.asp=0.8, echo=FALSE}
 # Loop through categories and print plots
 cat("::: {.panel-tabset}\n\n")  # open tabset container
 
@@ -817,7 +844,7 @@ lst_clean <- compact(plots_list)
 
 <!-- Tabs for HTML output -->
 
-```{r coral-tabyss, echo=FALSE, fig.cap="Figures 3a-3i. Coral density, old mortality, colony size, and size frequency distribution for focal M:IR species across sample years (2022 and 2024) and survey types (MIR and NCRMP + DRM).  Significant difference in cover estimates in each of these areas was indicated by (*).", results='asis', fig.width=9, fig.asp=1.2}
+```{r coral-tabyss, echo=FALSE, fig.cap="Figure 3. Coral density, old mortality, colony size, and size frequency distribution for focal M:IR species across sample years (2022 and 2024) and survey types (MIR and NCRMP + DRM). A black (*) indicates a significant difference in cover estimates between groups in that survey year. A colored (*) indicates significance across years for the given group.", results='asis', fig.width=9, fig.asp=1.2}
 
 cat("::: {.panel-tabset}\n\n")  # open tabset container
 
@@ -840,12 +867,10 @@ cat("\n:::\n")  # close tabset container
 
 ## Bleaching Estimates
 
-```{r  bleach 2022, fig.cap = "Figure 4. Estimated Observed Bleaching Frequency in 2022 using Ratio Estimaters.", fig.width=9, fig.asp=1.2}
+```{r  bleach 2022, echo = FALSE}
 
 # Set path to data files
 data_2022_path <- "data/FK2022_NCRMP_DRM_MIR_corsz_ARallv2.csv"
-
-
 
 MIR_species <- c("ACR PALM", "ACR CERV", "COL NATA", "DEN CYLI", "DIC STOK", "DIP LABY", "EUS FAST", "MEA MEAN", "PSE CLIV", "PSE STRI", "MON CAVE")
 
@@ -854,7 +879,6 @@ MIR_species <- c("ACR PALM", "ACR CERV", "COL NATA", "DEN CYLI", "DIC STOK", "DI
 #   filter(PV_TYPE == "Bleach_All") %>%
 #   left_join(., names)
 
-
 names_clean <- names %>%
   select(SPECIES_CD, SPECIES_NAME) %>%
   distinct(SPECIES_CD, .keep_all = TRUE)
@@ -862,89 +886,21 @@ names_clean <- names %>%
 tmp_ble_2022 <- read_csv("../Project/data/fk2022_NCRMP_MIR_sppPVbar_Ball_dom.csv") %>%
   left_join(., names_clean, by = "SPECIES_CD")
 
-top_species <- tmp_ble_2022 %>%
-  group_by(SPECIES_CD) %>%
-  summarise(mean_pv = mean(PVbar, na.rm = TRUE)) %>%
-  arrange(desc(mean_pv)) %>%
-  slice_head(n = 10) %>%  
-  pull(SPECIES_CD)
-
-tmp_filtered <- tmp_ble_2022 %>%
-  filter(SPECIES_CD %in% union(top_species, MIR_species)) 
-
-##Add a * for those MIR species
-tmp_filtered <- tmp_filtered %>% mutate(
-  SPECIES_NAME = case_when(
-    SPECIES_CD %in% MIR_species ~ paste0("*", SPECIES_NAME),
-    TRUE ~ as.character(SPECIES_NAME)))
-
-#Factor re-order for aesthetics  
-tmp_filtered <- tmp_filtered %>%
-  mutate(SPECIES_NAME = 
-           fct_reorder(SPECIES_NAME, if_else(is.na(PVbar), 0, PVbar), .desc = FALSE)) %>%
-    mutate(analysis_group = recode(analysis_group,
-                                 "MIR_GRP" = "MIR",
-                                 "NCRMP_GRP" = "NCRMP + DRM"))
-  
-
-plt_bleach <- tmp_filtered %>%
-  filter(SPECIES_NAME != "NA") %>%
-  ggplot(aes(x = PVbar, y = SPECIES_NAME, fill = analysis_group )) +
-  geom_col(position = position_dodge(width = 0.8), width = 0.8) +
-  scale_fill_manual(values = c("#0072B2", "#D55E00"), labels = c("MIR", "NCRMP + DRM")) +
-  geom_errorbar(aes(xmin = PV_LCI, xmax = PV_UCI),
-                position = position_dodge(width = 0.8), width = 0.1) +
-  facet_wrap(~analysis_group) +
-    labs(x = "Proportion of Colonies Bleached", y = "Coral Species", fill = "") +
-    scale_x_continuous(expand = expansion(mult = c(0, 0.1))) +
-        theme_Publication(base_size = 10) +
-    coord_cartesian(clip = "off") +
-        scale_y_discrete(labels = function(x) parse(text = paste0("italic('", x, "')"))) +
-    theme(
-          strip.text = element_text(size = 14, face = "bold"),
-          axis.text.y = element_text(size = 11),
-          axis.title = element_text(size = 13),
-          legend.position = "bottom",
-          legend.text = element_text(size = 10),
-          panel.spacing = unit(1, "lines")
-        ) +
-  ggtitle("2022 Estimates")
-
-
-print(plt_bleach)
-
-```
-
-```{r bleach 2024, fig.cap = "Figure 5. Estimated Observed Bleaching Frequency in 2024 using Ratio Estimaters", fig.width=9, fig.asp=1.2}
-
-# Set path to data files
-data_2022_path <- "data/FK2022_NCRMP_DRM_MIR_corsz_ARallv2.csv"
-
-
-MIR_species <- c("ACR PALM", "ACR CERV", "COL NATA", "DEN CYLI", "DIC STOK", "DIP LABY", "EUS FAST", "MEA MEAN", "PSE CLIV", "PSE STRI", "MON CAVE")
-
-#same as section above
-# tmp <- disease_bleach_prevalence_ratio_est(data_2022_path, 2022) %>%
-#   filter(PV_TYPE == "Bleach_All") %>%
-#   left_join(., names)
-
-names_clean <- names %>%
-  select(SPECIES_CD, SPECIES_NAME) %>%
-  distinct(SPECIES_CD, .keep_all = TRUE)
-
 tmp <- read_csv("../Project/data/fk2024_NCRMP_MIR_sppPVbar_Ball_dom.csv") %>%
     left_join(names_clean, by = "SPECIES_CD")
 
-top_species <- tmp %>%
+tmp_ble <- full_join(tmp_ble_2022, tmp)
+
+top_species <- tmp_ble %>%
   group_by(SPECIES_CD) %>%
   summarise(mean_pv = mean(PVbar, na.rm = TRUE)) %>%
   arrange(desc(mean_pv)) %>%
   slice_head(n = 10) %>%  
   pull(SPECIES_CD)
 
-tmp_filtered <- tmp %>%
+tmp_filtered <- tmp_ble %>%
   filter(SPECIES_CD %in% union(top_species, MIR_species)) 
-  
+
 ##Add a * for those MIR species
 tmp_filtered <- tmp_filtered %>% mutate(
   SPECIES_NAME = case_when(
@@ -953,53 +909,100 @@ tmp_filtered <- tmp_filtered %>% mutate(
 
 #Factor re-order for aesthetics  
 tmp_filtered <- tmp_filtered %>%
-  mutate(SPECIES_NAME = 
-           fct_reorder(SPECIES_NAME, if_else(is.na(PVbar), 0, PVbar), .desc = FALSE)) %>%
-    mutate(analysis_group = recode(analysis_group,
-                                 "MIR_GRP" = "MIR",
-                                 "NCRMP_GRP" = "NCRMP + DRM"))
+  mutate(
+    SPECIES_NAME = fct_reorder(SPECIES_NAME, if_else(is.na(PVbar), 0, PVbar), .desc = FALSE),
+    YEAR = factor(YEAR, levels = c("2022", "2024")),
+    analysis_group = recode(analysis_group,
+                            "MIR_GRP" = "MIR",
+                            "NCRMP_GRP" = "NCRMP + DRM"))
 
-plt_bleach <- tmp_filtered %>%
+
+plt_bleach_MIR <- tmp_filtered %>%
   filter(SPECIES_NAME != "NA") %>%
-  ggplot(aes(x = PVbar, y = SPECIES_NAME, fill = analysis_group)) +
-  geom_col(position = position_dodge(width = 0.8), width = 0.8) +
-  geom_errorbar(aes(xmin = PV_LCI, xmax = PV_UCI),
-                position = position_dodge(width = 0.8), width = 0.1) +
-  facet_wrap(~analysis_group) +
+  filter(analysis_group == "MIR") %>%
+  ggplot(aes(x = PVbar, y = SPECIES_NAME, pattern = YEAR, group = rev(YEAR))) +
+    ggpattern::geom_col_pattern(
+    position = position_dodge(width = 0.8),
+    width = 0.8,
+    fill = "#0072B2",    # background color (used if no pattern)
+    pattern_fill = "white",    # color of the pattern lines (overlay)
+    pattern_spacing = 0.0075,        # very tight pattern
+    pattern_size = 0.025,            # thin lines
+    pattern_density = .4          # fully patterned
+  ) +
+ scale_pattern_manual(values = c("2022" = "none", "2024" = "stripe")) +
+  geom_errorbar(aes(xmin = pmax(PV_LCI, 0), xmax = PV_UCI), position = position_dodge(width = 0.8), width = 0.1) +
     labs(x = "Proportion of Colonies Bleached", y = "Coral Species", fill = "") +
-    scale_x_continuous(expand = expansion(mult = c(0, 0.1))) +
-        theme_Publication(base_size = 10) +
-    coord_cartesian(clip = "off") +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.1))) +
+  theme_Publication(base_size = 10) +
+ coord_cartesian(xlim = c(0, 10), clip = "off") +
         scale_y_discrete(labels = function(x) parse(text = paste0("italic('", x, "')"))) +
-   scale_fill_manual(values = c("#0072B2", "#D55E00"), labels = c("MIR", "NCRMP + DRM")) +
     theme(
           strip.text = element_text(size = 14, face = "bold"),
           axis.text.y = element_text(size = 11),
           axis.title = element_text(size = 13),
           legend.position = "bottom",
+          title = element_text(size = 14),
           legend.text = element_text(size = 10),
           panel.spacing = unit(1, "lines")
         ) +
-  ggtitle("2024")
+  ggtitle("Mission: Iconic Reef")
 
+plt_bleach_NCRMP <- tmp_filtered %>%
+  filter(SPECIES_NAME != "NA") %>%
+  filter(analysis_group == "NCRMP + DRM") %>%
+  ggplot(aes(x = PVbar, y = SPECIES_NAME, pattern = YEAR, group = rev(YEAR))) +
+    ggpattern::geom_col_pattern(
+    position = position_dodge(width = 0.8),
+    width = 0.8,
+    fill = "#D55E00",    # background color (used if no pattern)
+    pattern_fill = "white",    # color of the pattern lines (overlay)
+    pattern_spacing = 0.0075, #75       # very tight pattern
+    pattern_size = 0.025,            # thin lines
+    pattern_density = .4          # fully patterned
+  ) +
+ scale_pattern_manual(values = c("2022" = "none", "2024" = "stripe")) +
+  geom_errorbar(aes(xmin = pmax(PV_LCI, 0), xmax = PV_UCI), position = position_dodge(width = 0.8), width = 0.1) +
+ # facet_wrap(~analysis_group) +
+    labs(x = "Proportion of Colonies Bleached", y = "Coral Species", fill = "") +
+    scale_x_continuous(expand = expansion(mult = c(0, 0.1))) +
+        theme_Publication(base_size = 10) +
+  coord_cartesian(xlim = c(0, 10), clip = "off") +
+        scale_y_discrete(labels = function(x) parse(text = paste0("italic('", x, "')"))) +
+    theme(
+          strip.text = element_text(size = 14, face = "bold"),
+          axis.title.y = element_blank(),
+          axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          axis.title = element_text(size = 13),
+          title = element_text(size = 14),
+          legend.position = "bottom",
+          legend.text = element_text(size = 10),
+          panel.spacing = unit(1, "lines")
+        ) +
+  ggtitle("NCRMP + DRM")
 
-print(plt_bleach)
+```
 
+```{r bleaching, fig.cap = "Figure 4. Individual Species’ Observed Bleaching Frequency Outside (NCRMP + DRM) and Inside (M:IR) areas.", fig.width=10, fig.asp=1.4}
+
+# Combine the two plots side-by-side
+final_plot <- (plt_bleach_MIR + plt_bleach_NCRMP) +
+  plot_layout(ncol = 2)  # Ensures side-by-side layout
+  
+
+print(final_plot)
 ```
 
 ## Disease Estimates
 
-```{r disease 2024, fig.cap = "Figure 6 . Estimated Observed Disease Frequency in 2022 using Ratio Estimaters.", fig.width=9, fig.asp=1.2}
+```{r disease, echo= FALSE}
 
 # Set path to data files
 data_2022_path <- "../Project/data/FK2022_NCRMP_DRM_MIR_corsz_ARallv2.csv"
 
-
 MIR_species <- c("ACR PALM", "ACR CERV", "COL NATA", "DEN CYLI", "DIC STOK", "DIP LABY", "EUS FAST", "MEA MEAN", "PSE CLIV", "PSE STRI", "MON CAVE")
 
-# tmp <- disease_bleach_prevalence_ratio_est(data_2022_path, 2022) %>%
-#   filter(PV_TYPE == "Bleach_All") %>%
-#   left_join(., names)
 
 names_clean <- names %>%
   select(SPECIES_CD, SPECIES_NAME) %>%
@@ -1008,135 +1011,116 @@ names_clean <- names %>%
 tmp_dis_2022 <- read_csv("../Project/data/fk2022_NCRMP_MIR_sppPVbar_Dall_dom.csv") %>%
     left_join(names_clean, by = "SPECIES_CD")
 
-top_species <- tmp_dis_2022 %>%
+tmp_dis_2024 <- read_csv("../Project/data/fk2024_NCRMP_MIR_sppPVbar_Dall_dom.csv") %>%
+    left_join(names_clean, by = "SPECIES_CD")
+
+tmp_dis <- full_join(tmp_dis_2022, tmp_dis_2024)
+
+top_species <- tmp_dis %>%
   group_by(SPECIES_CD) %>%
   summarise(mean_pv = mean(PVbar, na.rm = TRUE)) %>%
   arrange(desc(mean_pv)) %>%
   slice_head(n = 10) %>%  
   pull(SPECIES_CD)
 
-tmp_filtered <- tmp_dis_2022 %>%
+tmp_filtered <- tmp_dis %>%
   filter(SPECIES_CD %in% union(top_species, MIR_species)) 
   
 ##Add a * for those MIR species
 tmp_filtered <- tmp_filtered %>% mutate(
   SPECIES_NAME = case_when(
     SPECIES_CD %in% MIR_species ~ paste0( "*", SPECIES_NAME),
-    TRUE ~ as.character(SPECIES_NAME)))
+    TRUE ~ as.character(SPECIES_NAME))
+)
 
 #Factor re-order for aesthetics  
 tmp_filtered <- tmp_filtered %>%
-  mutate(SPECIES_NAME = 
-           fct_reorder(SPECIES_NAME, if_else(is.na(PVbar), 0, PVbar), .desc = FALSE)) %>%
-    mutate(analysis_group = recode(analysis_group,
+  mutate(
+     SPECIES_NAME = fct_reorder(SPECIES_NAME, PVbar, .fun = function(x) max(x, na.rm = TRUE), .desc = FALSE),
+    YEAR = factor(YEAR, levels = c("2022", "2024")),
+    analysis_group = recode(analysis_group,
                                  "MIR_GRP" = "MIR",
                                  "NCRMP_GRP" = "NCRMP + DRM"))
 
-plt_disease <- tmp_filtered %>%
+
+plt_dis_MIR <- tmp_filtered %>%
   filter(SPECIES_NAME != "NA") %>%
-  ggplot(aes(x = PVbar, y = SPECIES_NAME, fill = analysis_group)) +
-  geom_col(position = position_dodge(width = 0.8), width = 0.8) +
-  geom_errorbar(
-    aes(xmin = pmax(0, PV_LCI), xmax = PV_UCI),
-    width = 0.15
+  filter(analysis_group == "MIR") %>%
+  ggplot(aes(x = PVbar, y = SPECIES_NAME, group = rev(YEAR), pattern = YEAR)) +
+  ggpattern::geom_col_pattern(
+    position = position_dodge(width = 0.8),
+    width = 0.8,
+    fill = "#0072B2",    
+    pattern_fill = "white",   
+    pattern_spacing = 0.0075,        
+    pattern_size = 0.025,          
+    pattern_density = .4          
   ) +
-  facet_wrap(~analysis_group) +
-    labs(x = "Proportion of Colonies Bleached", y = "Coral Species", fill = "") +
+ scale_pattern_manual(values = c("2022" = "none", "2024" = "stripe")) +
+  geom_errorbar(aes(xmin = pmax(PV_LCI, 0), xmax = PV_UCI),
+                position = position_dodge(width = 0.8), width = 0.1) +
+    labs(x = "Proportion of Colonies Disease", y = "Coral Species", fill = "") +
     scale_x_continuous(expand = expansion(mult = c(0, 0.1))) +
         theme_Publication(base_size = 10) +
-    coord_cartesian(clip = "off") +
+  coord_cartesian(xlim = c(0, 2), clip = "off") +
         scale_y_discrete(labels = function(x) parse(text = paste0("italic('", x, "')"))) +
-   scale_fill_manual(values = c("#0072B2", "#D55E00"), labels = c("MIR", "NCRMP + DRM")) +
-    theme(
+   theme(
           strip.text = element_text(size = 14, face = "bold"),
           axis.text.y = element_text(size = 11),
           axis.title = element_text(size = 13),
           legend.position = "bottom",
+          title = element_text(size = 14),
           legend.text = element_text(size = 10),
           panel.spacing = unit(1, "lines")
         ) +
-  ggtitle("2022")
+  ggtitle("Mission: Iconic Reef")
 
-
-print(plt_disease)
-
-```
-
-```{r,  fig.cap = "Figure 7 . Estimated Observed Disease Frequency in 2024 using Ratio Estimaters.", fig.width=9, fig.asp=1.2}
-# Set path to data files
-data_2024_path <- "../Project/data/FK2022_NCRMP_DRM_MIR_corsz_ARallv2.csv"
-
-
-MIR_species <- c("ACR PALM", "ACR CERV", "COL NATA", "DEN CYLI", "DIC STOK", "DIP LABY", "EUS FAST", "MEA MEAN", "PSE CLIV", "PSE STRI", "MON CAVE")
-
-# tmp <- disease_bleach_prevalence_ratio_est(data_2022_path, 2022) %>%
-#   filter(PV_TYPE == "Bleach_All") %>%
-#   left_join(., names)
-
-names_clean <- names %>%
-  select(SPECIES_CD, SPECIES_NAME) %>%
-  distinct(SPECIES_CD, .keep_all = TRUE)
-
-tmp_dis_2024 <- read_csv("../Project/data/fk2024_NCRMP_MIR_sppPVbar_Dall_dom.csv") %>%
-    left_join(names_clean, by = "SPECIES_CD")
-
-
-top_species <- tmp_dis_2024 %>%
-  group_by(SPECIES_CD) %>%
-  summarise(mean_pv = mean(PVbar, na.rm = TRUE)) %>%
-  arrange(desc(mean_pv)) %>%
-  slice_head(n = 10) %>%  
-  pull(SPECIES_CD)
-
-tmp_filtered <- tmp_dis_2024 %>%
-  filter(SPECIES_CD %in% union(top_species, MIR_species)) 
-
-##Add a * for those MIR species
-tmp_filtered <- tmp_filtered %>% mutate(
-  SPECIES_NAME = case_when(
-    SPECIES_CD %in% MIR_species ~ paste0( "*", SPECIES_NAME),
-    TRUE ~ as.character(SPECIES_NAME)))
-
-#Factor re-order for aesthetics  
-tmp_filtered <- tmp_filtered %>%
-  mutate(SPECIES_NAME = 
-           fct_reorder(SPECIES_NAME, if_else(is.na(PVbar), 0, PVbar), .desc = FALSE)) %>%
-    mutate(analysis_group = recode(analysis_group,
-                                 "MIR_GRP" = "MIR",
-                                 "NCRMP_GRP" = "NCRMP + DRM"))
-
-plt_dis <- tmp_filtered %>%
+plt_dis_NCRMP <- tmp_filtered %>%
   filter(SPECIES_NAME != "NA") %>%
-  ggplot(aes(x = PVbar, y = SPECIES_NAME, fill = analysis_group)) +
-  geom_col(position = position_dodge(width = 0.8), width = 0.8) +
-  geom_errorbar(
-    aes(xmin = pmax(0, PV_LCI), xmax = PV_UCI),
-    width = 0.15) +
-  facet_wrap(~analysis_group) +
-    labs(x = "Proportion of Colonies Bleached", y = "Coral Species", fill = "") +
+  filter(analysis_group == "NCRMP + DRM") %>%
+  ggplot(aes(x = PVbar, y = SPECIES_NAME, group = rev(YEAR), pattern = YEAR)) +
+  ggpattern::geom_col_pattern(
+    position = position_dodge(width = 0.8),
+    width = 0.8,
+    fill = "#D55E00",    
+    pattern_fill = "white",   
+    pattern_spacing = 0.0075,        
+    pattern_size = 0.025,          
+    pattern_density = .4          
+  ) +
+ scale_pattern_manual(values = c("2022" = "none", "2024" = "stripe")) +
+  geom_errorbar(aes(xmin = pmax(PV_LCI, 0), xmax = PV_UCI),
+                position = position_dodge(width = 0.8), width = 0.1) +
+    labs(x = "Proportion of Colonies Disease", y = "Coral Species", fill = "") +
     scale_x_continuous(expand = expansion(mult = c(0, 0.1))) +
         theme_Publication(base_size = 10) +
-    coord_cartesian(clip = "off") +
+  coord_cartesian(xlim = c(0, 2), clip = "off") +
         scale_y_discrete(labels = function(x) parse(text = paste0("italic('", x, "')"))) +
-   scale_fill_manual(values = c("#0072B2", "#D55E00"), labels = c("MIR", "NCRMP + DRM")) +
     theme(
           strip.text = element_text(size = 14, face = "bold"),
-          axis.text.y = element_text(size = 11),
+          axis.title.y = element_blank(),
+          axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
           axis.title = element_text(size = 13),
+          title = element_text(size = 14),
           legend.position = "bottom",
           legend.text = element_text(size = 10),
           panel.spacing = unit(1, "lines")
         ) +
-  ggtitle("2024")
-
-
-print(plt_dis)
-
+  ggtitle("NCRMP + DRM")
 ```
 
-## Overall Density Comparision
+```{r,  fig.cap = "Figure 6. Individual Species’ Observed Diseased Frequency Outside (NCRMP + DRM) and Inside (M:IR) areas.", fig.width=10, fig.asp=1.4}
 
-```{r overall Density,  fig.cap = "Figure 8. Caption needed here!", fig.width=9, fig.asp=1.2, echo = FALSE}
+# Combine the two plots side-by-side
+(final_plot <- (plt_dis_MIR + plt_dis_NCRMP) +
+  plot_layout(ncol = 2))
+  
+```
+
+## Overall Density Comparison
+
+```{r overall Density,  fig.cap = "Figure 7. Caption needed here!", fig.width=9, fig.asp=1.2, echo = FALSE}
 ###Adding species names and starring MIR species
 a <- left_join(a, names %>% distinct(), by = "SPECIES_CD") %>%
    dplyr::mutate(SPECIES_NAME = case_when(
@@ -1176,9 +1160,9 @@ a <- a %>%
 
 ```
 
-## Overall Old Mortality Comparision
+## Overall Old Mortality Comparison
 
-```{r overall Old_Mort, fig.cap = "Figure 9. Caption needed here!", fig.width=9, fig.asp=1.2, echo = FALSE}
+```{r overall Old_Mort, fig.cap = "Figure 8. Caption needed here!", fig.width=9, fig.asp=1.2, echo = FALSE}
 ###Adding species names and starring MIR species
 b <- left_join(b, names %>% distinct(), by = "SPECIES_CD") %>%
    dplyr::mutate(SPECIES_NAME = case_when(
@@ -1216,9 +1200,9 @@ b <- b %>%
 
 ```
 
-## Overall Max Diameter Comparision
+## Overall Max Diameter Comparison
 
-```{r overall Max_Dim, fig.cap = "Figure 10. Caption needed here too!", fig.width=9, fig.asp=1.2, echo = FALSE}
+```{r overall Max_Dim, fig.cap = "Figure 9. Caption needed here too!", fig.width=9, fig.asp=1.2, echo = FALSE}
 
 spec_unq <- unique(b$SPECIES_CD)
 
