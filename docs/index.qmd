@@ -79,11 +79,17 @@ MIR_species <- c( "ACR CERV", "ACR PALM", "COL NATA", "DEN CYLI",
 
 ```
 
-Corals and benthic communities were monitored using two different NCRMP surveys: the Benthic Community Assessment survey and the Coral Demographics survey (NOAA CRCP 2022a, 2022b, 2024a, 2024b). The Benthic Community Assessment survey includes: 1) benthic cover (%) estimates along a 15-m transect with a line point intercept method, 2) presence/absence of Endangered Species Act (ESA)-listed coral species (NOAA National Marine Fisheries Service, 2014), 3) abundance of key macroinvertebrates, and 4) reef rugosity measurements within a 15 m x 2 m belt-transect area (NOAA CRCP 2022a, 2024b). At the same site, coral demographics were surveyed within a 10 m x 1 m belt-transect area (NOAA CRCP 2022b, 2024b). NCRMP coral demographic survey data were combined with complementarily allocated survey data from Florida Fish and Wildlife Conservation Commission's Disturbance Response Monitoring ([DRM](coraldrm.org)). In all coral demographics surveys, all live coral colonies ≧ 4 cm were counted, identified to species, measured to the nearest centimeter, and estimates were made of the proportion per colony of any present mortality (recent or old), disease (absent, present: slow, fast), and/or bleaching (none, total, partial, paling). Only live coral colonies were included in the survey; dead colonies with 100% mortality were not surveyed (e.g., colonies killed by coral disease). Juvenile corals (\< 4 cm) were reported for species richness only and were not included in counts, size measurements, or estimates of condition (NOAA CRCP 2022b); in 2024, juveniles of select coral species were counted (NOAA CRCP 2024b). In 2024, NCRMP benthic surveys also included large area imaging (LAI) collected at most survey sites: analyses of these LAI data are in progress and not presented here.
+Corals and benthic communities were monitored using two different NCRMP surveys: the Benthic Community Assessment survey and the Coral Demographics survey (NOAA CRCP 2022a, 2022b, 2024a, 2024b). The Benthic Community Assessment survey includes: 1) benthic cover (%) estimates along a 15-m transect with a line point intercept method, 2) presence/absence of Endangered Species Act (ESA)-listed coral species (NOAA National Marine Fisheries Service, 2014), 3) abundance of key macroinvertebrates, and 4) reef rugosity measurements within a 15 m x 2 m belt-transect area (NOAA CRCP 2022a, 2024b). At the same site, coral demographics were surveyed within a 10 m x 1 m belt-transect area (NOAA CRCP 2022b, 2024b). NCRMP coral demographic survey data were combined with complementarily allocated survey data from Florida Fish and Wildlife Conservation Commission's Disturbance Response Monitoring ([DRM](https://coraldrm.org/)). In all coral demographics surveys, all live coral colonies ≧ 4 cm were counted, identified to species, measured to the nearest centimeter, and estimates were made of the proportion per colony of any present mortality (recent or old), disease (absent, present: slow, fast), and/or bleaching (none, total, partial, paling). Only live coral colonies were included in the survey; dead colonies with 100% mortality were not surveyed (e.g., colonies killed by coral disease). Juvenile corals (\< 4 cm) were reported for species richness only and were not included in counts, size measurements, or estimates of condition (NOAA CRCP 2022b); in 2024, juveniles of select coral species were counted (NOAA CRCP 2024b). In 2024, NCRMP benthic surveys also included large area imaging (LAI) collected at most survey sites: analyses of these LAI data are in progress and not presented here.
 
-To allow direct comparisons of benthic communities inside the restoration areas with the Florida Keys reefs, the NCRMP dataset was restricted to strata types overlapping M:IR sites and depths less than 12 meters. A majority of the reef habitats within the seven M:IR areas ranged from 0-12 meters depth. Statistical comparisons were conducted between M:IR and NCRMP estimates for each survey year and between years for M:IR and NCRMP. This report focuses on coral populations and benthic community metrics; a separate report can be found for fish population assessments.
+To allow direct comparisons of benthic communities inside the restoration areas with the Florida Keys reefs, the NCRMP dataset was restricted to strata types overlapping M:IR sites and depths less than 12 meters. A majority of the reef habitats within the seven M:IR areas ranged from 0-12 meters depth. Statistical comparisons were conducted between M:IR and NCRMP estimates for each survey year and between years for M:IR and NCRMP. This report focuses on coral populations and benthic community metrics; a separate report can be found for fish population assessments (Harper & Blondeau, 2025).
 
 ## Benthic Cover Sites
+
+In 2022, a total of 584 surveys occurred (Table 1) across 403 sites (Florida Tech Memo 2022). In 2024, 771 surveys occured across 542 sites (Groves et al., 2024, in prep).  
+
+```{r, echo=FALSE, fig.cap = "Table 1. Will we include? I don't know! Does it look consistent?"}
+knitr::include_graphics("../Project/images/Proper_Table.png")
+```
 
 ```{r prepare data for benthic cover table, include = FALSE}
 
@@ -261,6 +267,7 @@ final <- left_join(table, names) %>%
              paste0("*", "<i>", SPECIES_NAME, "</i>"),
              paste0("<i>", SPECIES_NAME, "</i>")
            )) %>%
+  mutate(across(c(`2022`, `2024`), ~ format(., big.mark = ",", scientific = FALSE))) %>%
   ungroup() %>%
   select(-SPECIES_CD)
 ```
@@ -363,7 +370,7 @@ plot <- df_filtered %>%
                 position = position_dodge(width =  0.06)) +
   scale_color_manual(
     values = c("MIR_GRP" = "#0072B2", "NCRMP_GRP" = "#D55E00"),
-    labels = c("MIR", "NCRMP"),
+    labels = c("M:IR", "NCRMP"),
     name = ""
     ) +
   labs(x = "Year", y = "Cover (%)", title = category ) +
@@ -409,7 +416,7 @@ sig_cover <- sig_cover %>%
 (plot + 
 ### Significance BETWEEN GROUPS on X axis
   geom_text(data = sig_cover %>% filter (is.na(REGION)),
-            aes(x = YEAR, y = y_min), label = "*",
+            aes(x = YEAR, y = y_min), label = "+",
             inherit.aes = FALSE, size = 15, color = "black") +
 ### Significance BETWEEN YEARS on graph
   geom_text(data = sig_cover %>% filter (is.na(YEAR)),
@@ -419,7 +426,7 @@ sig_cover <- sig_cover %>%
 
 ```
 
-```{r loop through cover plots and tab results, fig.cap="Figure 2.  Cover estimates for main benthic groups inside and outside M:IR areas for 2022 and 2024. A black (*) indicates a significant difference in cover estimates between groups in that survey year. A colored (*) indicates significance across years for the given group. The category ‘Other’ comprises Cyanobacteria, Palythoa, <i>Millepora</i>, Seagrass, Bare Substrate, and other miscellaneous organisms.", fig.width=9, results='asis', fig.asp=0.8, echo=FALSE}
+```{r loop through cover plots and tab results, fig.cap="Figure 2.  Cover estimates for main benthic groups inside and outside M:IR areas for 2022 and 2024. A black (+) indicates a significant difference between groups in that survey year (i.e., 2022 or 2024). A colored (*) indicates significance difference between years for the given group (i.e., M:IR or NCRMP). The category ‘Other’ comprises Cyanobacteria, Palythoa, <i>Millepora</i>, Seagrass, Bare Substrate, and other miscellaneous organisms.", fig.width=9, results='asis', fig.asp=0.8, echo=FALSE}
 # Loop through categories and print plots
 cat("::: {.panel-tabset}\n\n")  # open tabset container
 
@@ -714,7 +721,7 @@ sig_cover <- sig_cover %>%
 plt3 <- plt3 + 
 ### Significance BETWEEN GROUPS on X axis
   geom_text(data = sig_cover %>% filter (is.na(REGION)),
-            aes(x = YEAR, y = y_min), label = "*",
+            aes(x = YEAR, y = y_min), label = "+",
             inherit.aes = FALSE, size = 10, color = "black") +
 ### Significance BETWEEN YEARS on graph
   geom_text(data = sig_cover %>% filter (is.na(YEAR)),
@@ -764,7 +771,7 @@ plt3 <- plt3 +
     facet_wrap(~YEAR) +
     labs(y = "Frequency (Size Class & Mortality)", x = "Length (cm)") +
     scale_x_continuous(breaks = seq_along(lab_vec), labels = lab_vec) +
-    scale_fill_manual(values = c("#0072B2", "#D55E00"), labels = c("MIR", "NCRMP + DRM")) +
+    scale_fill_manual(values = c("#0072B2", "#D55E00"), labels = c("M:IR", "NCRMP + DRM")) +
     scale_color_manual(values = c("#0072B2", "#D55E00"), guide = "none") +
     theme_Publication(base_size = 10) +
     theme(
@@ -844,7 +851,7 @@ lst_clean <- compact(plots_list)
 
 <!-- Tabs for HTML output -->
 
-```{r coral-tabyss, echo=FALSE, fig.cap="Figure 3. Coral density, old mortality, colony size, and size frequency distribution for focal M:IR species across sample years (2022 and 2024) and survey types (MIR and NCRMP + DRM). A black (*) indicates a significant difference in cover estimates between groups in that survey year. A colored (*) indicates significance across years for the given group.", results='asis', fig.width=9, fig.asp=1.2}
+```{r coral-tabyss, echo=FALSE, fig.cap="Figure 3. Coral density, old mortality, colony size, and size frequency distribution for focal M:IR species across sample years (2022 and 2024) and survey types (MIR and NCRMP + DRM). A black (+) indicates a significant difference in cover estimates between groups in that survey year (i.e., 2022 or 2024). A colored (*) indicates significance between years for the given group (i.e., M:IR or NCRMP).", results='asis', fig.width=9, fig.asp=1.2}
 
 cat("::: {.panel-tabset}\n\n")  # open tabset container
 
@@ -1137,7 +1144,7 @@ a <- a %>%
     ggplot(aes(x = avDen, y = SPECIES_NAME, group = interaction(SPECIES_CD, analysis_group), color = analysis_group)) +
     geom_point(	position = position_dodge(width = 0.3)) + 
     geom_errorbar(aes(xmin = avDen - SE_avDen, xmax = avDen + SE_avDen), width = 0.1, 	position = position_dodge(width = 0.3)) +
-    labs(y = "Species", x = "Density (col/m2)") +
+    labs(y = "Species", x = expression("Density (col/m"^2*")")) +
     theme_Publication(base_size = 10) +
     facet_grid(~YEAR) +
     scale_x_continuous(expand = expansion(mult = c(0, 0))) +
@@ -1256,12 +1263,24 @@ c <- c %>% filter(SPECIES_CD %in% spec_unq)
 
 Ault, J. S., Smith, S. G., Luo, J., Grove, L. J., Johnson, M. W., and Blondeau, J. (2021). Refinement of the southern Florida Reef Tract benthic habitat map with habitat use patterns of reef fish species. (NCEI Accession 0224176). NOAA National Centers for Environmental Information. Dataset. https://www.ncei.noaa.gov/archive/accession/0224176 NOAA Coral Reef Conservation Program. (2022b).
 
-National Coral Reef Monitoring Program (NCRMP) benthic community assessment survey field protocols for U.S. Atlantic: Florida, Flower Garden Banks, Puerto Rico, and U.S. Virgin Islands--2022. NOAA Coral Reef Conservation Program. https://doi.org/0.25923/0708-8333
+Groves, S., Mateski, J., Krampitz, N., Sturm, A. M., and Viehman, T. S. (2025). NCRMP benthics statistical package in R (website). R package version 1.0.0. https://github.com/MSE-NCCOS-NOAA/NCRMP_benthics
 
-NOAA Coral Reef Conservation Program. (2022c). National Coral Reef Monitoring Program (NCRMP) coral demographics survey field protocols for U.S. Atlantic: Florida, Flower Garden Banks, Puerto Rico, U.S. Virgin Islands. 2022. NOAA Coral Reef Conservation Program. https://doi.org/10.25923/9a1r-m911
+*Harper + Blondeau (2025). Mission: Iconic Reefs RVC Analysis*
+
+NOAA Coral Reef Conservation Program. (2022b). National Coral Reef Monitoring Program (NCRMP) Benthic Community Assessment survey field protocols for U.S. Atlantic: Florida, Flower Garden Banks, Puerto Rico, and U.S. Virgin Islands--2022. NOAA Coral Reef Conservation Program. https://doi.org/0.25923/0708-8333
+
+NOAA Coral Reef Conservation Program. (2022b). National Coral Reef Monitoring Program (NCRMP) coral demographics survey field protocols for U.S. Atlantic: Florida, Flower Garden Banks, Puerto Rico, U.S. Virgin Islands. 2022. NOAA Coral Reef Conservation Program. https://doi.org/10.25923/9a1r-m911
+
+NOAA Coral Reef Conservation Program (CRCP). (2024a). National Coral Reef Monitoring Program (NCRMP) Benthic Community Assessment Survey Field Protocols for U.S. Atlantic: Florida, Flower Garden Banks, Puerto Rico, and U.S. Virgin Islands. NOAA Coral Reef Conservation Program. 29 pp. doi.org/10.25923/e3gf-vk84
+
+NOAA Coral Reef Conservation Program (CRCP). (2024b). National Coral Reef Monitoring Program (NCRMP) Coral Demographics Survey Field Protocols for U.S. Atlantic: Florida, Flower Garden Banks, Puerto Rico, U.S. Virgin Islands. NOAA Coral Reef Conservation Program. 28 pp. doi.org/10.25923/hgpr-jm80
 
 NOAA National Marine Fisheries Service. (2014). Final rule. Endangered and threatened wildlife and plants: Final listing determinations on proposal to list 66 reef-building coral species and to reclassify elkhorn and staghorn corals. Federal Register, 79(175), 53851--54123.
 
-*insert fish tech memo referenced earlier*
+Viehman, T. S., Grove, J. G., Blondeau, J., Cain, E., Edwards, K. F., Groves, S. H., Krampitz, N., Langwiser, C., Siceloff, L. Swanson, D., Towle, E. K., and Williams, B. (2023). National Coral Reef Monitoring Program, Biological Monitoring Summary -- Florida: 2022. NOAA Technical Memorandum NOS CRCP 48. https://doi.org/10.25923/e6xg-1989
 
-also missing some of the field protocols?
+**Data Sources**
+
+National Coral Reef Monitoring Program Florida Benthic ([NCRMP](https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.nodc:NCRMP-Benthic-Florida))
+
+Florida Fish and Wildlife Conservation Commission's Disturbance Response Monitoring ([DRM](https://coraldrm.org/))
