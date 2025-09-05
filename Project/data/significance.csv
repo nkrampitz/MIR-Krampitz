@@ -1,6 +1,11 @@
 ﻿metric,variable,REGION,YEAR,significant
 cover,Hard Coral,MIR_GRP,NA,1
+cover,Crustose Coralline Algae (CCA),MIR_GRP,NA,1
+cover,Sponge,NA,2022,1
+cover,Other,NA,2022,1
 cover,Turf Algae,NA,2022,1
+cover,Sponge,NA,2024,1
+cover,Other,NA,2024,1
 cover,Turf Algae,NA,2024,1
 density,ACR CERV,NA,2022,1
 density,ACR PALM,NA,2022,1
