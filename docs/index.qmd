@@ -109,8 +109,8 @@ source("../Project/R Scripts/dis_ble_prev_ratio_est.R")
 
 ```{r MIR species, echo = FALSE}
 MIR_species <- c( "ACR CERV", "ACR PALM", "COL NATA", "DEN CYLI",
-                    "DIC STOK", "DIP LABY", "EUS_ AST", "MEA MEAN", 
-                    "ORB ANNU", "ORB FAVE", "ORB FRAN", 
+                    "DIC STOK", "DIP LABY", "EUS FAST", "MEA MEAN", 
+                    "ORB ANNU", "ORB FAVE", "POR ASTR", 
                     "PSE CLIV", "PSE STRI", "MON CAVE" )
 ```
 
@@ -360,6 +360,7 @@ new_dat <- cvr_analysis %>%
 
 ## read in significance
 sig <- read_csv("../Project/data/significance.csv")
+## This has since been auomtaed for the focal species to account for changing focal species, but is kept for the cover signficnace 
 
 dodge_width <- 0.06
 
@@ -499,14 +500,8 @@ df <- read.csv( "../Project/data/FK2024_NCRMP_DRM_MIR_corsz_AR_NK.csv") %>%
 ##Top 15 species
 top <- df %>% ungroup() %>% dplyr::slice(1:15)
 
-##MIR Species
-target_species <- c("ACR PALM", "ACR CERV", "COL NATA", "DEN CYLI",
-  "DIC STOK", "DIP LABY", "EUS_ AST", "MEA MEAN",
-  "ORB ANNU", "ORB FAVE", "ORB FRAN", 
-  "PSE CLIV", "PSE STRI", "MON CAVE")
-
 MIR <- df %>% filter(
-  SPECIES_CD %in% target_species
+  SPECIES_CD %in% MIR_species
 )
 
 ##Together
@@ -521,7 +516,7 @@ final <- left_join(table, names) %>%
   arrange(desc(`2022`)) %>%
   mutate(SPECIES_NAME =
            ifelse(
-             `SPECIES_CD` %in% target_species,
+             `SPECIES_CD` %in% MIR_species,
              paste0("*", "<i>", SPECIES_NAME, "</i>"),
              paste0("<i>", SPECIES_NAME, "</i>")
            )) %>%
@@ -637,8 +632,6 @@ b <- tmp$AR_mortality %>%
   select(YEAR, SPECIES_CD, avMort, SE, analysis_group) %>%
   rename(avMortOld = avMort, SE_avMortOld = SE)
 
-
-
 # old_mortality_ready_for_stat_testing <- b %>%
 #   mutate(UCI = avMortOld + SE_avMortOld,
 #          LCI = avMortOld - SE_avMortOld)
@@ -671,8 +664,6 @@ c <- bind_rows(ratio_est_2022, ratio_est_2024) %>%
   rename(avMaxdiam = Lbar,
          SE_maxdiam = SE_L)
 
-
-
 # Prep make size bins
 tmp <- MIR_make_size_bins(years = c(2022, 2024),
         analyzed_species = MIR_species)
@@ -695,6 +686,131 @@ domain_mort <- tmp$domain_mort_spp
 # write_csv(b, "../Project/old_mort.csv")
 # write_csv(c, "../Project/max_diam.csv")
 ```
+
+```{r, run signficnace for focal species, echo = FALSE}
+#Preps incoming tmp data for below functions to run all significance cleaner
+
+add_ci <- function(df, mean_col, se_col = NULL) {
+  
+  df <- df %>%
+    rename(
+      year = YEAR,
+      species_cd = SPECIES_CD) %>%
+      mutate(
+        mean = {{ mean_col }},
+        SE   = {{ se_col }}) %>%
+    mutate(
+      LCI = mean - 1.96 * SE,
+      UCI = mean + 1.96 * SE
+    ) %>%
+    select(year, analysis_group, species_cd, mean, LCI, UCI)
+  
+  return(df)
+}
+
+##Runs significance test between years. Right now just automated for 2022 vs. 2024
+run_zone_test <- function(df, metric_name) {
+  
+  df %>%
+    filter(year %in% c(2022, 2024)) %>%
+    pivot_wider(
+      id_cols = c(species_cd, analysis_group),
+      names_from = year,
+      values_from = c(mean, LCI, UCI),
+      names_sep = "_") %>%
+    mutate(
+      diff = mean_2024 - mean_2022,
+      dir  = ifelse(diff > 0, "POS", "NEG"),
+      testA = case_when(
+        dir == "POS" & LCI_2024 > mean_2022 ~ TRUE,
+        dir == "NEG" & UCI_2024 < mean_2022 ~ TRUE,
+        TRUE ~ FALSE
+      ),
+      testB = case_when(
+        dir == "POS" & mean_2024 > UCI_2022 ~ TRUE,
+        dir == "NEG" & mean_2024 < LCI_2022 ~ TRUE,
+        TRUE ~ FALSE
+      ),
+      sig = testA & testB) %>%
+    filter(sig) %>%
+    mutate(
+      sig_year = ifelse(dir == "POS", 2024, 2022) ) %>%
+    transmute(
+      metric = metric_name,
+      species_cd,
+      analysis_group = analysis_group,
+      year = NA_integer_,
+      sig = 1
+    )
+}
+
+####Runs significance test between groups 
+run_time_test <- function(df, metric_name) {
+  
+  df %>%
+    pivot_wider(
+      id_cols = c(species_cd, year),
+      names_from = analysis_group,
+      values_from = c(mean, LCI, UCI),
+      names_sep = "_"
+    ) %>%
+    
+    mutate(
+      diff = mean_MIR_GRP - mean_NCRMP_GRP,
+      dir  = ifelse(diff > 0, "MIR_GRP", "NCRMP_GRP"),
+      testA = case_when(
+        diff > 0 & LCI_MIR_GRP > mean_NCRMP_GRP ~ TRUE,
+        diff < 0 & UCI_MIR_GRP < mean_NCRMP_GRP ~ TRUE,
+        TRUE ~ FALSE
+      ),
+      testB = case_when(
+        diff > 0 & mean_MIR_GRP > UCI_NCRMP_GRP ~ TRUE,
+        diff < 0 & mean_MIR_GRP < LCI_NCRMP_GRP ~ TRUE,
+        TRUE ~ FALSE
+      ),
+      sig = testA & testB) %>%
+      filter(sig) %>%
+    transmute(
+      metric = metric_name,
+      species_cd,
+      analysis_group = NA_character_, 
+      year = year,
+      sig = 1
+    )
+}
+
+density_sig <- add_ci( a,
+  mean_col = avDen,
+  se_col   = SE_avDen)
+
+mort_sig <- add_ci( b,
+  mean_col = avMortOld,
+  se_col   = SE_avMortOld)
+
+size_sig <- add_ci( c,
+  mean_col = avMaxdiam,
+  se_col= SE_maxdiam)
+
+
+sig <- bind_rows(
+  # Density
+  run_time_test(density_sig, "density"),
+  run_zone_test(density_sig, "density"),
+  # Mortality
+  run_time_test(mort_sig, "mortality"),
+  run_zone_test(mort_sig, "mortality"),
+  # Size
+  run_time_test(size_sig, "size"),
+  run_zone_test(size_sig, "size")) %>%
+  arrange(metric, species_cd)%>% 
+  mutate(
+    variable = species_cd,
+    REGION = analysis_group,
+    YEAR = year
+  )
+
+```
+
 
 ```{r create_species_plots function,  fig.width=9, fig.asp=1.2, echo = FALSE}
 
@@ -729,7 +845,7 @@ dodge_width <- 0.05
 ##Adding the significance labels
 sig_cover <- sig %>%
   filter(metric == "density") %>%
-  filter(variable == species)
+  filter(species_cd == species)
 
 # For between years find a midpoint to go on the plot
 midpoints <- den_filtered %>%
@@ -794,7 +910,7 @@ b_filtered <- b_filtered %>%
 #This may take a fair amount of tweaking ##
 sig_cover <- sig %>%
   filter(metric == "mortality") %>%
-  filter(variable == species)
+  filter(species_cd == species)
 
 # For between years find a midpoint to go on the plot
 midpoints <- b_filtered %>%
@@ -852,7 +968,7 @@ c_filtered <- c_filtered %>%
 #This may take a fair amount of tweaking ##
 sig_cover <- sig %>%
   filter(metric == "size") %>%
-  filter(variable == species)
+  filter(species_cd == species)
 
 # For between years find a midpoint to go on the plot
 midpoints <- c_filtered %>%
