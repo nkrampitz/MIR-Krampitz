@@ -109,7 +109,7 @@ source("../Project/R Scripts/dis_ble_prev_ratio_est.R")
 
 ```{r MIR species, echo = FALSE}
 MIR_species <- c( "ACR CERV", "ACR PALM", "COL NATA", "DEN CYLI",
-                    "DIC STOK", "DIP LABY", "EUS FAST", "MEA MEAN", 
+                    "DIP LABY", "EUS FAST", "MEA MEAN", 
                     "ORB ANNU", "ORB FAVE", "POR ASTR", 
                     "PSE CLIV", "PSE STRI", "MON CAVE" )
 ```
@@ -481,7 +481,7 @@ if (knitr::is_latex_output()) {
 
 ## Coral Demography
 
-Although several metrics reported here encompass all observed coral species, ten focal species are highlighted as particularly important to M:IR's goal: *Acropora palmata*, *Acropora cervicornis*, *Colpophyllia natans*, *Dendrogyra cylindrus*, *Dichocoenia stokesii*, *Diploria labyrinthiformis*, *Orbicella annularis*, *Orbicella faveolata*, *Orbicella franski*, *Meandrina meandrites*, *Montastraea cavernosa*, *Pseudodiploria clivosa*, and *Pseudodiploria strigosa*. These species have experienced drastic population declines and are targeted for restoration at the M:IR sites. Specifically, most were severely affected by White Band Disease (*Acropora* spp.) or Stony Coral Tissue Loss Disease (SCTLD).
+Although several metrics reported here encompass all observed coral species, ten focal species are highlighted as particularly important to M:IR's goal: *Acropora palmata*, *Acropora cervicornis*, *Colpophyllia natans*, *Dendrogyra cylindrus*, *Diploria labyrinthiformis*, *Orbicella annularis*, *Orbicella faveolata*, *Meandrina meandrites*, *Montastraea cavernosa*, *Porites astreoides*, *Pseudodiploria clivosa*, and *Pseudodiploria strigosa*. These species have experienced drastic population declines and are targeted for restoration at the M:IR sites. Specifically, most were severely affected by White Band Disease (*Acropora* spp.) or Stony Coral Tissue Loss Disease (SCTLD).
 
 The following table summarizes the number of observations across all strata and survey years of each focal species and identifies the most abundant species encountered.
 
