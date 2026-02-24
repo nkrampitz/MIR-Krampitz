@@ -891,6 +891,7 @@ b_filtered <- b_filtered %>%
     tibble(YEAR = 2024, SPECIES_CD = "ACR PALM", avMortOld = NA, SE_avMortOld = NA, analysis_group = "MIR_GRP"))
 }
 
+
   plt2 <- b_filtered %>%
     ggplot(aes(x = YEAR, y = avMortOld, group = analysis_group, color = analysis_group)) +
     geom_point(position = position_dodge(dodge_width)) +
@@ -907,7 +908,6 @@ b_filtered <- b_filtered %>%
 #
 
 ##Adding the significance labels
-#This may take a fair amount of tweaking ##
 sig_cover <- sig %>%
   filter(metric == "mortality") %>%
   filter(species_cd == species)
@@ -918,6 +918,12 @@ midpoints <- b_filtered %>%
   summarise(
     y_mid = 1.02 * mean(avMortOld, na.rm = TRUE)) %>%
     dplyr::rename(REGION = analysis_group) #for joining purposes
+
+##Special case for PAST since stars overlap
+if (species == "POR ASTR") {
+  midpoints <- tibble(
+  REGION = c("MIR_GRP", "NCRMP_GRP"),
+  y_mid  = c(11.5, 9.5))}
 
 ## For between groups find the y min to go on the plot
 ymin <- b_filtered %>%
@@ -1076,7 +1082,9 @@ species_images <- list(
   "Pseudodiploria clivosa" = list(path = "../Project/coral_image_files/pse_cliv.png", type = "png"),
   "Pseudodiploria strigosa" = list(path = "../Project/coral_image_files/pse_stri.png", type = "png"),
   "Montastraea cavernosa" = list(path = "../Project/coral_image_files/mon_cave.jpg", type = "jpg"),
-  "Acropora palmata" = list(path = "../Project/coral_image_files/acr_palm.png", type = "png")
+  "Acropora palmata" = list(path = "../Project/coral_image_files/acr_palm.png", type = "png"),
+  "Porites astreoides" = list(path = "../Project/coral_image_files/por_astr.jpg", type = "jpg"),
+  "Eusmilia fastigiata" = list(path = "../Project/coral_image_files/eus_fast.png", type = "png")
 )
 
 get_species_image_plot <- function(species_name) {
