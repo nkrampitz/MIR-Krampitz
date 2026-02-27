@@ -122,6 +122,10 @@ To allow for direct comparisons of benthic communities inside the M:IR restorati
 
 NCRMP analyses scripts for corals and benthic communities are open source and available at [NCRMP Benthic R package](https://github.com/MSE-NCCOS-NOAA/NCRMP_benthics) [@Groves2025].
 
+The survey design incorporates habitat strata to generate habitat-weighted estimates for the full MIR-encompassed area, which are then compared with the depth and habitat-restricted weighted estimates from NCRMP. As a result, valid comparisons are only between estimates of MIR and NCRMP as a whole. The survey design does not support comparison of individual MIR zones with NCRMP estimates nor individual MIR zones to each other. For further data exploration, metrics could be examined by comparing the strata-specific estimate level of M:IR (all zones combined) to the corresponding NCRMP strata to provide more information about the differences or similarities between habitats. However, interpretation of these comparisons are constrained by sample size.
+
+Surveys conducted in 2022 were initially intended to serve as a baseline to evaluate restoration effects. However, after the 2023 bleaching event and the subsequent outplant mortality, a more appropriate baseline would pool 2022 and 2024 survey data for comparison with future surveys.
+
 ### Benthic Survey Effort
 
 In 2022, a total of 584 surveys occurred (Table 1) across 403 sites [@Viehman2023]. In 2024, 771 surveys occurred across 542 sites [@GroveInPrep].
@@ -1601,6 +1605,7 @@ if (knitr::is_latex_output()) {
    (final_plot <- (plt_dis_MIR + plt_dis_NCRMP) +
   plot_layout(ncol = 2))
 ```
+
 
 ## Point of Contact
 
